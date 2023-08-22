@@ -17,11 +17,11 @@ Leaf* insert_helper(Leaf* current_leaf, int value)
 		std::cout << "insert left\n";
 		current_leaf->left = insert_helper(current_leaf->left, value);
 	}
-	else if (current_leaf->value < value)
+	else if (current_leaf->value <= value)
 	{
-		// switch current leaf to the left leaf and keep going down
+		// switch current leaf to the right leaf and keep going down
 		std::cout << "insert right\n";
-		current_leaf->left = insert_helper(current_leaf->left, value);
+		current_leaf->right = insert_helper(current_leaf->right, value);
 	}
 	return current_leaf;
 }
@@ -42,12 +42,12 @@ void BinarySearchTree::insert(int value)
 	//std::cout << "leaf value: " << leaf_added->value << "\n";
 }
 
-void print_helper(Leaf* current_leaf, int level = 0)
+void print_helper(Leaf* current_leaf, int level = 1)
 {
 	if (current_leaf != nullptr)
 	{
-		std::cout << "value: " << current_leaf->value << " Level: " << level << "\n";
 		print_helper(current_leaf->left, level + 1);
+		std::cout << "value: " << current_leaf->value << " Level: " << level << "\n";
 		print_helper(current_leaf->right, level + 1);
 	}
 }
