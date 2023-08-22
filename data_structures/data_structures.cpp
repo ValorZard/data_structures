@@ -4,6 +4,7 @@
 #include <iostream>
 #include "linked_list.h"
 #include "array_list.h"
+#include "binary_tree.h"
 
 int main()
 {
@@ -51,6 +52,20 @@ int main()
     {
         std::cout << second_vec[i] << "\n";
     }
+
+    // binary search tree
+    BinarySearchTree bst;
+    bst.insert(7);
+    bst.insert(2);
+    bst.insert(6);
+    bst.insert(4);
+    bst.insert(5);
+    bst.insert(3);
+    bst.insert(10);
+    bst.insert(1);
+    bst.insert(8);
+    bst.insert(12);
+    bst.print_tree();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

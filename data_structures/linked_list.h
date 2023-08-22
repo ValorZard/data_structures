@@ -2,5 +2,5 @@
 struct Node
 {
 	int value;
-	Node* next;
+	Node* next = nullptr;
 };
