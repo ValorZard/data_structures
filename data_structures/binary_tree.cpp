@@ -28,6 +28,7 @@ Leaf* insert_helper(Leaf* current_leaf, int value)
 
 void BinarySearchTree::insert(int value)
 {
+	std::cout << "value being added: " << value << "\n";
 	// handle edge case of head being null
 	if (head == nullptr)
 	{
@@ -36,8 +37,10 @@ void BinarySearchTree::insert(int value)
 		head->right = nullptr;
 		head->left = nullptr;
 	}
-	std::cout << "value being added: " << value << "\n";
-	Leaf* leaf_added = insert_helper(head, value); // this will just give back the head
+	else
+	{
+		Leaf* leaf_added = insert_helper(head, value); // this will just give back the head
+	}
 	//std::cout << "head value: " << head->value << "\n";
 	//std::cout << "leaf value: " << leaf_added->value << "\n";
 }
