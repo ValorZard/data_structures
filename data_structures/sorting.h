@@ -86,43 +86,46 @@ ArrayList<int> insertion_sort(ArrayList<int> array_list) // let's not change the
 	return array_list;
 }
 
-void merge(ArrayList<int>::Iterator left, ArrayList<int>::Iterator middle, ArrayList<int>::Iterator right, ArrayList<int>& sorted_list)
+void merge(ArrayList<int>::Iterator left, ArrayList<int>::Iterator middle, ArrayList<int>::Iterator right, ArrayList<int>& work_list)
 {
 	auto left_iter = left;
 	auto right_iter = middle;
 
 	// While there are elements in the left or right runs...
-	for (size_t index = 0; index < sorted_list.size(); ++index) {
+	for (auto iter = left; iter != right; ++iter) {
 		// If left run head exists and is <= existing right run head.
 		if (left_iter < middle && (right_iter >= right || *left_iter <= *right_iter)) {
-			sorted_list[index] = *left_iter;
+			work_list.push_back(*left_iter);
 			++left_iter;
 		}
 		else {
-			sorted_list[index] = *right_iter;
+			work_list.push_back(*right_iter);
 			++right_iter;
 		}
 	}
 }
 
-void merge_sort_helper(ArrayList<int>::Iterator left, ArrayList<int>::Iterator right, ArrayList<int>& sorted_list)
+void merge_sort_helper(ArrayList<int>::Iterator left, ArrayList<int>::Iterator right, ArrayList<int>& work_list)
 {
 	auto size = std::distance(left, right);
-	if (size < 2) // only two hop between begin and end, which means run_size == 1
+	if (size <= 1) // only two hop between begin and end, which means run_size == 1
 	{
 		return;
 	}
 	auto middle = std::next(left, (size / 2));
-	merge_sort_helper(left, middle, sorted_list);
-	merge_sort_helper(middle, right, sorted_list);
-	merge(left, middle, right, sorted_list);
+	merge_sort_helper(left, middle, work_list);
+	merge_sort_helper(middle, right, work_list);
+	merge(left, middle, right, work_list);
 }
 
 // Merge Sort
 ArrayList<int> merge_sort(ArrayList<int>& unsorted_list)
 {
-	ArrayList<int> sorted_list(unsorted_list.size()); // make the sorted list as big as unsorted list
-	merge_sort_helper(unsorted_list.begin(), unsorted_list.end(), sorted_list);
+	ArrayList<int> sorted_list = unsorted_list;
+
+	ArrayList<int> work_list = unsorted_list;
+
+	merge_sort_helper(sorted_list.begin(), sorted_list.end(), work_list);
 	return sorted_list;
 }
 

@@ -44,7 +44,7 @@ int main()
     second_vec.push_back(124);
     second_vec.push_back(125);
     second_vec.push_back(126);
-    std::cout << "size of vec: " << second_vec.size() << " max size of vec: " << second_vec.max_size() << " vec: " << second_vec.to_string() << "\n";
+    std::cout << "size of vec: " << second_vec.size() << " max size of vec: " << second_vec.get_capacity() << " vec: " << second_vec.to_string() << "\n";
    
     // do sorting stuff
     std::cout << "doing sorting" << "\n";
@@ -96,23 +96,27 @@ int main()
 
     std::cout << "Test ForEach: " << test_vec.to_string() << "ForEach Works!" << "\n";
 
-    std::cout << "Test Erase: " << "\n";
+    std::cout << "Test Erase! Size: " << test_vec.size() << "\n";
 
     test_vec.erase(test_vec.iterator_at(10));
 
-    std::cout << "Erased index 10 " << test_vec.to_string() << "\n";
+    std::cout << "Erased index 10 " << test_vec.to_string() << "\n"; // - 1 element
+    std::cout << "Test Erase! Size: " << test_vec.size()  << " Capacity: " << test_vec.get_capacity() << "\n";
 
     test_vec.erase(test_vec.iterator_at(7), test_vec.iterator_at(21));
 
-    std::cout << "Erased between index 7 and 21 " << test_vec.to_string() << "\n";
+    std::cout << "Erased between index 7 and 21 " << test_vec.to_string() << "\n"; // deleted (21 - 7) elements
+    std::cout << "Test Erase! Size: " << test_vec.size() << "\n";
 
     test_vec.remove_at(22);
 
     std::cout << "Deleted index 22 " << test_vec.to_string() << "\n";
+    std::cout << "Test Erase! Size: " << test_vec.size() << "\n";
 
     test_vec.remove_between(40, 60);
     
-    std::cout << "Deleted from 40 and up to but not including 60 " << test_vec.to_string() << "\n";
+    std::cout << "Deleted from 40 and up to but not including 60 " << test_vec.to_string() << "\n"; // deleted (60 - 40) elements
+    std::cout << "Test Erase! Size: " << test_vec.size() << "\n";
 
     std::cout << "Check if test_vec has 69: " << std::to_string(test_vec.has(69)) << "\n";
 
@@ -120,13 +124,15 @@ int main()
     
     test_vec.erase(test_vec.find(81), test_vec.end());
 
+    std::cout << "Checking a random element to see if it's not junk data: " << *(test_vec.end() - 4) << "\n";
+
     std::cout << "Since test_vec has 81, erase all values between 81 and the end of the vec " << test_vec.to_string() << "\n";
 
     std::random_shuffle(test_vec.begin(), test_vec.end());
 
     std::cout << "We've screwed up this vector enough, lets shuffle it" << test_vec.to_string() << "\n";
 
-    //test_vec = merge_sort(test_vec);
+    test_vec = merge_sort(test_vec);
 
     std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
 
@@ -142,6 +148,7 @@ int main()
     std::cout << "We're inserting 42 into this 4 times: " << insertion_vec.to_string() << "\n";
     insertion_vec.insert(insertion_vec.begin() + 4, 4, 42);
     std::cout << "Check if it worked..: " << insertion_vec.to_string() << "\n";
+    //std::cout << "What length should be: " << 10 + 1 + 4 << " What it actually is: " << insertion_vec.size() << "\n";
 
     ArrayList<int> empty_vec;
     std::cout << "Here's an empty vec! " << empty_vec.to_string() << "\n";

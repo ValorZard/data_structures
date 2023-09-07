@@ -111,9 +111,9 @@ public:
 	void clear();
 
 	// delete element at specific position
-	template <class InputIterator> void erase(InputIterator iter);
+	void erase(Iterator iter);
 	// delete elements starting from begin_erase, but ending before end_erase
-	template <class InputIterator> void erase(InputIterator begin_erase, InputIterator end_erase);
+	void erase(Iterator begin_erase, Iterator end_erase);
 	// does same thing as erase
 	void remove_at(size_t index);
 	// does the same thing as erase
@@ -134,7 +134,7 @@ public:
 
 	// the following are const because these functions shouldn't change the data inside the vector itself
 	size_t size() const;
-	size_t max_size() const; // returns capacity
+	size_t get_capacity() const; // returns capacity
 
 	// just so we don't have to constantly check array_list.size() != 0
 	bool is_empty();
@@ -384,7 +384,7 @@ template <typename Data> size_t ArrayList<Data>::size() const
 	return length;
 }
 
-template <typename Data> size_t ArrayList<Data>::max_size() const
+template <typename Data> size_t ArrayList<Data>::get_capacity() const
 {
 	return capacity;
 }
@@ -417,8 +417,7 @@ inline Data ArrayList<Data>::pop_back()
 
 // this can be optimized better
 template <typename Data> 
-template <class InputIterator>
-inline void ArrayList<Data>::erase(const InputIterator iter)
+inline void ArrayList<Data>::erase(const Iterator iter)
 {
 	// the capacity is still the same
 	Data* new_array = new Data[capacity];
@@ -432,10 +431,12 @@ inline void ArrayList<Data>::erase(const InputIterator iter)
 		{
 			// make sure to decrease size by one now that we know we have erased the data
 			length -= 1;
-			continue;
 		}
-		new_array[index] = *it;
-		++index;
+		else
+		{
+			new_array[index] = *it;
+			++index;
+		}
 	}
 
 	delete[] array;
@@ -453,8 +454,7 @@ inline void ArrayList<Data>::erase(const InputIterator iter)
 	This is generally an inefficient operation compared to the one performed for the same operation by other kinds of sequence containers (such as list or forward_list).
 */
 template <typename Data> 
-template <class InputIterator>
-inline void ArrayList<Data>::erase(const InputIterator begin_erase, const InputIterator end_erase)
+inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
 {
 	Data* new_array = new Data[capacity];
 
@@ -468,11 +468,13 @@ inline void ArrayList<Data>::erase(const InputIterator begin_erase, const InputI
 		{
 			// make sure to decrease length by one now that we know we have erased the data
 			length -= 1;
-			continue;
 		}
-		// idk why this generates an errror
-		new_array[index] = *it;
-		++index;
+		else
+		{
+			// idk why this generates an errror
+			new_array[index] = *it;
+			++index;
+		}
 	}
 
 	delete[] array;
@@ -631,6 +633,7 @@ inline void ArrayList<Data>::insert(InputIterator position, InputIterator first,
 		new_array[index] = *iter;
 	}
 
+	
 	delete[] array;
 	array = new_array;
 }
@@ -770,7 +773,6 @@ template <typename Data>
 inline void ArrayList<Data>::clear()
 {
 	// reset everything
-	this->length = 0;
 	delete[] array;
 	setup();
 }
