@@ -111,7 +111,6 @@ public:
 	const Iterator const_begin() const;
 	const Iterator const_end() const;
 
-
 	////////////////////////////////////////////////////////////
 	//				NICE TO HAVES							///
 	//////////////////////////////////////////////////////////
@@ -342,6 +341,12 @@ typename ArrayList<Data>::Iterator ArrayList<Data>::end()
 	return Iterator(&array[length]); // get pointer to end of the array (There should be nothing here and that's the point)
 }
 
+template <typename Data>
+const typename ArrayList<Data>::Iterator ArrayList<Data>::end() const
+{
+	return Iterator(&array[length]); // get pointer to end of the array (There should be nothing here and that's the point)
+}
+
 template <typename Data> 
 const typename ArrayList<Data>::Iterator ArrayList<Data>::const_end() const
 {
@@ -379,8 +384,8 @@ template <typename Data>  std::string ArrayList<Data>::to_string() const
 {
 	std::string list_string = "[";
 
-	for (int i = 0; i < size(); ++i) {
-		list_string += std::to_string(array[i]) + ",";
+	for (auto it = begin(); it != end(); ++it) {
+		list_string += std::to_string(*it) + ",";
 	}
 
 	list_string += "]";

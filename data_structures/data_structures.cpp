@@ -80,12 +80,7 @@ int main()
         test_vec.push_back(i);
     }
 
-    std::cout << "Test ForEach" << "\n";
-    for (int num : test_vec)
-    {
-        std::cout << num << "\n";
-    }
-    std::cout << "ForEach Works!" << "\n";
+    std::cout << "Test ForEach: " << test_vec.to_string() << "ForEach Works!" << "\n";
 
     // binary search tree
     BinarySearchTree bst;
