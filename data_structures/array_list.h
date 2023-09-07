@@ -21,10 +21,16 @@ public:
 	// overloading the [] operator
 	Data& operator[](unsigned int);
 
-	int size();
-	int max_size(); // returns capacity
+	// for const correctness, we should also have a const version of this function when ArrayList is const
+	// https://isocpp.org/wiki/faq/const-correctness
+	const Data& operator[](unsigned int) const;
 
-	void push_back(Data new_data);
+
+	// the following are const because these functions shouldn't change the data inside the vector itself
+	int size() const;
+	int max_size() const; // returns capacity
+
+	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
 };
 
 template <typename Data> void ArrayList<Data>::setup()
@@ -69,17 +75,22 @@ template <typename Data> Data& ArrayList<Data>::operator[](unsigned int index)
 	return array[index];
 }
 
-template <typename Data> int ArrayList<Data>::size()
+template <typename Data> const Data& ArrayList<Data>::operator[](unsigned int index) const
+{
+	return array[index];
+}
+
+template <typename Data> int ArrayList<Data>::size() const
 {
 	return length;
 }
 
-template <typename Data> int ArrayList<Data>::max_size()
+template <typename Data> int ArrayList<Data>::max_size() const
 {
 	return capacity;
 }
 
-template <typename Data> void ArrayList<Data>::push_back(Data new_data)
+template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
 {
 	++length; // increase length since we're adding something at the end
 	resize();
