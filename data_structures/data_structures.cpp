@@ -143,6 +143,10 @@ int main()
     insertion_vec.insert(insertion_vec.begin() + 4, 4, 42);
     std::cout << "Check if it worked..: " << insertion_vec.to_string() << "\n";
 
+    ArrayList<int> empty_vec;
+    std::cout << "Here's an empty vec! " << empty_vec.to_string() << "\n";
+    empty_vec.insert(empty_vec.begin(), insertion_vec.begin(), insertion_vec.end());
+    std::cout << "Now not so empty! " << empty_vec.to_string() << "\n";
 
     // binary search tree
     BinarySearchTree bst;

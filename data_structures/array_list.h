@@ -26,7 +26,7 @@ public:
 	//////////////////////////////////////////////////////////
 	ArrayList(); // default constructor
 	ArrayList(size_t length);
-	template <typename OutsideIterator> ArrayList(OutsideIterator first, OutsideIterator last); // iterator constructor
+	//template <class InputIterator> ArrayList(InputIterator first, InputIterator last); // iterator constructor
 	ArrayList(const Data data_array[], const size_t size);
 
 	// we need a destructor, a copy constructor, and an assigment operator due to the rule of three
@@ -111,9 +111,9 @@ public:
 	void clear();
 
 	// delete element at specific position
-	void erase(Iterator iter);
+	template <class InputIterator> void erase(InputIterator iter);
 	// delete elements starting from begin_erase, but ending before end_erase
-	void erase(Iterator begin_erase, Iterator end_erase);
+	template <class InputIterator> void erase(InputIterator begin_erase, InputIterator end_erase);
 	// does same thing as erase
 	void remove_at(size_t index);
 	// does the same thing as erase
@@ -123,8 +123,10 @@ public:
 	Data pop_at(size_t index);
 
 	// using Iterator to insert elements
-	void insert(Iterator position, Data value);
-	void insert(Iterator position, size_t amount, Data value);
+	template <class InputIterator> void insert(InputIterator position, Data value);
+	template <class InputIterator> void insert(InputIterator position, size_t amount, Data value);
+	// starts from the first but ends before the last
+	template <class InputIterator> void insert(InputIterator position, InputIterator first, InputIterator last);
 
 	////////////////////////////////////////////////////////////
 	//				CAPACITY MANAGEMENT						///
@@ -286,16 +288,17 @@ inline ArrayList<Data>::ArrayList()
 	setup();
 }
 
-// THIS IS BROKEN I NEED TO FIX IT!!
-template<typename Data>
-template<typename OutsideIterator>
-inline ArrayList<Data>::ArrayList(OutsideIterator first, OutsideIterator last)
+/* THIS IS BROKEN I NEED TO FIX IT!!
+template<typename Data, class InputIterator>
+inline ArrayList<Data>::ArrayList(InputIterator first, InputIterator last)
 {
 	setup(last-first);
 
 	std::copy(first, last, array);
 
 }
+*/
+
 
 template<typename Data>
 inline ArrayList<Data>::ArrayList(const Data data_array[], const size_t size)
@@ -414,7 +417,8 @@ inline Data ArrayList<Data>::pop_back()
 
 // this can be optimized better
 template <typename Data> 
-inline void ArrayList<Data>::erase(const Iterator iter)
+template <class InputIterator>
+inline void ArrayList<Data>::erase(const InputIterator iter)
 {
 	// the capacity is still the same
 	Data* new_array = new Data[capacity];
@@ -449,7 +453,8 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 	This is generally an inefficient operation compared to the one performed for the same operation by other kinds of sequence containers (such as list or forward_list).
 */
 template <typename Data> 
-inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
+template <class InputIterator>
+inline void ArrayList<Data>::erase(const InputIterator begin_erase, const InputIterator end_erase)
 {
 	Data* new_array = new Data[capacity];
 
@@ -492,7 +497,8 @@ template <typename Data> Data ArrayList<Data>::pop_at(size_t index)
 }
 
 template<typename Data>
-inline void ArrayList<Data>::insert(Iterator position, Data value)
+template <class InputIterator>
+inline void ArrayList<Data>::insert(InputIterator position, Data value)
 {
 	size_t index_of_inserted_value = position - begin();
 	if (index_of_inserted_value > length)
@@ -522,10 +528,10 @@ inline void ArrayList<Data>::insert(Iterator position, Data value)
 }
 
 template<typename Data>
-inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value)
+template <class InputIterator>
+inline void ArrayList<Data>::insert(InputIterator position, size_t amount, Data value)
 {
 	size_t index_of_inserted_value = position - begin();
-	std::cout << *position << "\n";
 	if (index_of_inserted_value > length)
 	{
 		// we can't insert that doesn't exist
@@ -569,6 +575,60 @@ inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value
 	for (size_t index = length; index < capacity; ++index)
 	{
 		new_array[index] = 0;
+	}
+
+	delete[] array;
+	array = new_array;
+}
+
+template<typename Data>
+template <class InputIterator>
+inline void ArrayList<Data>::insert(InputIterator position, InputIterator first, InputIterator last)
+{
+	size_t index_of_inserted_value = position - begin();
+	if (index_of_inserted_value > length)
+	{
+		// we can't insert that doesn't exist
+		// inserting at length is fine because thats just equivalent to push_back()
+		throw std::length_error("we can't insert that at a position which doesn't exist");
+	}
+
+	size_t amount = last - first; // the amount of elements we want to add
+
+	// the length is now increased by amount, so we should resize
+	size_t old_length = length;
+	length += amount;
+
+	// we should resize the array if necessary
+	Data* new_array;
+	if (length > capacity)
+	{
+		capacity = 2 * length;
+	}
+	new_array = new Data[capacity];
+
+
+	// fill in everything before like normal
+
+	size_t index = 0;
+
+	for (auto iter = begin(); iter != position; ++iter)
+	{
+		new_array[index] = *iter;
+		++index;
+	}
+
+	// fill up the amount indexs with value
+	for (auto iter = first; iter != last; ++iter)
+	{
+		new_array[index] = *iter;
+		++index;
+	}
+
+	// keep iterating through the new array while remembering the offset
+	for (auto iter = position; iter != end(); ++iter)
+	{
+		new_array[index] = *iter;
 	}
 
 	delete[] array;
