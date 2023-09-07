@@ -46,17 +46,19 @@ int main()
     
     // do sorting stuff
     std::cout << "doing sorting" << "\n";
-    ArrayList<int> third_vec;
-    third_vec.push_back(19);
-    third_vec.push_back(21);
-    third_vec.push_back(32);
-    third_vec.push_back(1);
-    third_vec.push_back(14);
-    third_vec.push_back(26);
-    third_vec.push_back(7);
-    third_vec.push_back(30);
-    ArrayList<int> sorted_vec = selection_sort(third_vec);
-    
+    ArrayList<int> unsorted_vec = second_vec;
+    unsorted_vec.push_back(19);
+    unsorted_vec.push_back(21);
+    unsorted_vec.push_back(32);
+    unsorted_vec.push_back(1);
+    unsorted_vec.push_back(14);
+    unsorted_vec.push_back(26);
+    unsorted_vec.push_back(7);
+    unsorted_vec.push_back(30);
+    std::cout << "unsorted array: " << unsorted_vec.to_string() << "\n";
+    // this caused horrible bugs before we added a copy constructor
+    ArrayList<int> sorted_vec = selection_sort(unsorted_vec);
+    std::cout << "unsorted array: " << unsorted_vec.to_string() << " sorted array: " << sorted_vec.to_string() << "\n";
 
 
     // binary search tree

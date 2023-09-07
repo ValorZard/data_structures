@@ -11,12 +11,22 @@ private:
 	Data* array;
 	int length; // the current length of all actual values
 	int capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
-
-	bool resize(); // runs whenever we need to resize the array to have greater capacity;
 	void setup(); // reuse for different constructors
 public:
 	ArrayList(); // default constructor
 	ArrayList(unsigned int length);
+
+	// we need a destructor, a copy constructor, and an assigment operator due to the rule of three
+	// https://en.cppreference.com/w/cpp/language/rule_of_three
+
+	// copy constructor
+	// used when we want to initalize a new ArrayList with the data of an old arraylist
+	// https://www.geeksforgeeks.org/copy-constructor-in-cpp/
+	ArrayList(const ArrayList& old);
+
+	// copy assignment (just to make sure there's nothing weird going on)
+	ArrayList<Data>& operator=(const ArrayList<Data>& old);
+
 	~ArrayList();
 
 	// overloading the [] operator
@@ -32,6 +42,13 @@ public:
 	int max_size() const; // returns capacity
 
 	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
+
+	// runs whenever we need to resize the array to have greater capacity;
+	// also just realized we can use this whenever we want to change size of the arraylist
+	bool resize(int new_length);
+
+	// if we want to delete everything and reset it
+	void reset();
 
 	// this should be const even though we're creating a string, we are not touching any data
 	std::string to_string() const;
@@ -49,7 +66,7 @@ template <typename Data> void ArrayList<Data>::setup()
 		capacity = length * 2; // else double the size of the array so we can optimize memory assignment
 	}
 	// make sure the values of the array are all default
-	array = new int[capacity] {0};
+	array = new Data[capacity];
 }
 
 template <typename Data> ArrayList<Data>::ArrayList(const unsigned int size)
@@ -67,6 +84,36 @@ template <typename Data> ArrayList<Data>::ArrayList()
 {
 	this->length = 0;
 	setup();
+}
+
+template <typename Data> ArrayList<Data>::ArrayList(const ArrayList& old)
+{
+	// do basic setup before we do anything too crazy
+	this->length = 0;
+	setup();
+	// this should work fine i think, unless we horribly fuck things up
+	// since this will result in something the same size as the other array list with all the data in the right place
+	for (int i = 0; i < old.length; ++i) {
+		// get each of the data from the old ArrayList and put it into this one
+		push_back(old.array[i]);
+	}
+}
+
+template <typename Data> ArrayList<Data>& ArrayList<Data>::operator=(const ArrayList<Data>& old)
+{
+	if (this == &old)
+	{
+		return *this; // self assigment, so don't need to do anything
+	}
+
+	// reset the object
+	reset();
+
+	for (int i = 0; i < old.size(); ++i) {
+		push_back(old.array[i]);
+	}
+
+	return *this;
 }
 
 template <typename Data> ArrayList<Data>::~ArrayList()
@@ -97,19 +144,19 @@ template <typename Data> int ArrayList<Data>::max_size() const
 template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
 {
 	++length; // increase length since we're adding something at the end
-	resize();
+	resize(length);
 	array[length - 1] = new_data; // add thing on the end of the array
 }
 
-template <typename Data>  bool ArrayList<Data>::resize()
+template <typename Data>  bool ArrayList<Data>::resize(int new_length)
 {
 	// double capacity if the array has become too big
-	if (length >= capacity)
+	if (new_length >= capacity)
 	{
 		capacity *= 2;
 		Data* new_array = new Data[capacity];
 		// copy stuff from old array to new array
-		for (int i = 0; i < length; ++i)
+		for (int i = 0; i < new_length; ++i)
 		{
 			new_array[i] = array[i];
 		}
@@ -119,6 +166,14 @@ template <typename Data>  bool ArrayList<Data>::resize()
 		return true; // return true if we did resize the array
 	}
 	return false; // we didn't resize the array, false
+}
+
+template <typename Data> void ArrayList<Data>::reset()
+{
+	// reset everything
+	this->length = 0;
+	delete[] array;
+	setup();
 }
 
 template <typename Data>  std::string ArrayList<Data>::to_string() const
