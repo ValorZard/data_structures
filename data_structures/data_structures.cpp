@@ -82,6 +82,24 @@ int main()
 
     std::cout << "Test ForEach: " << test_vec.to_string() << "ForEach Works!" << "\n";
 
+    std::cout << "Test Erase: " << "\n";
+
+    test_vec.erase(test_vec.iterator_at(10));
+
+    std::cout << "Erased index 10 " << test_vec.to_string() << "\n";
+
+    test_vec.erase(test_vec.iterator_at(7), test_vec.iterator_at(21));
+
+    std::cout << "Erased between index 7 and 21 " << test_vec.to_string() << "\n";
+
+    test_vec.remove_at(22);
+
+    std::cout << "Deleted index 22 " << test_vec.to_string() << "\n";
+
+    test_vec.remove_between(40, 60);
+    
+    std::cout << "Deleted from 40 and up to but not including 60 " << test_vec.to_string() << "\n";
+
     // binary search tree
     BinarySearchTree bst;
     bst.insert(7);

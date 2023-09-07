@@ -6,6 +6,8 @@
 #include <cstddef>  // For std::ptrdiff_t
 
 // ArrayList is equivalent to std::vector
+// Influenced by https://github.com/Miguel-Deniz/Vector-Implementation/
+// Most of this code is mine, but if I ever got stuck on something, I looked at how he did it
 
 template <typename Data>
 class ArrayList
@@ -13,15 +15,15 @@ class ArrayList
 private:
 	// currently pointer to an array of ints
 	Data* array;
-	int length; // the current length of all actual values
-	int capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
+	size_t length; // the current length of all actual values
+	size_t capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
 	void setup(); // reuse for different constructors
 public:
 	////////////////////////////////////////////////////////////
 	//					CONSTRUCTORS						///
 	//////////////////////////////////////////////////////////
 	ArrayList(); // default constructor
-	ArrayList(unsigned int length);
+	ArrayList(size_t length);
 
 	// we need a destructor, a copy constructor, and an assigment operator due to the rule of three
 	// https://en.cppreference.com/w/cpp/language/rule_of_three
@@ -37,11 +39,11 @@ public:
 	~ArrayList();
 
 	// overloading the [] operator
-	Data& operator[](unsigned int);
+	Data& operator[](size_t);
 
 	// for const correctness, we should also have a const version of this function when ArrayList is const
 	// https://isocpp.org/wiki/faq/const-correctness
-	const Data& operator[](unsigned int) const;
+	const Data& operator[](size_t) const;
 
 	////////////////////////////////////////////////////////////
 	//				ARRAY MANAGEMENT						///
@@ -62,33 +64,6 @@ public:
 	const Data& back() const;
 
 	////////////////////////////////////////////////////////////
-	//				CHANGING DATA							///
-	//////////////////////////////////////////////////////////
-
-	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
-	Data& pop_back(); // returns the last element as we remove it from the array
-
-	// if we want to delete everything and reset it
-	void clear();
-
-	////////////////////////////////////////////////////////////
-	//				CAPACITY MANAGEMENT						///
-	//////////////////////////////////////////////////////////
-
-	// the following are const because these functions shouldn't change the data inside the vector itself
-	int size() const;
-	int max_size() const; // returns capacity
-
-	// just so we don't have to constantly check array_list.size() != 0
-	bool is_empty();
-	const bool is_empty() const;
-
-	/* runs whenever we need to resize the array to have greater capacity;
-	 also just realized we can use this whenever we want to change size of the arraylist
-	*/
-	bool resize(int new_length);
-
-	////////////////////////////////////////////////////////////
 	//						ITERATORS						///
 	//////////////////////////////////////////////////////////
 
@@ -107,9 +82,52 @@ public:
 	Iterator end();
 	const Iterator end() const;
 
+	// useful function that idk why normal vector doesn't have
+	Iterator iterator_at(size_t index);
+	const Iterator iterator_at(size_t index) const;
+
 	// these two versions of begin and end work when we want the iterator to not change any of the data inside of the array_List
-	const Iterator const_begin() const;
-	const Iterator const_end() const;
+	const Iterator cbegin() const;
+	const Iterator cend() const;
+
+	////////////////////////////////////////////////////////////
+	//				CHANGING DATA							///
+	//////////////////////////////////////////////////////////
+
+	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
+	Data pop_back(); // returns the last element as we remove it from the array
+
+	// if we want to delete everything and reset it
+	void clear();
+
+	// delete element at specific position
+	void erase(Iterator iter);
+	// delete elements starting from begin_erase, but ending before end_erase
+	void erase(Iterator begin_erase, Iterator end_erase);
+	// does same thing as erase
+	void remove_at(size_t index);
+	// does the same thing as erase
+	void remove_between(size_t start, size_t end);
+
+	// pop element at specific position
+	Data pop_at(size_t index);
+
+	////////////////////////////////////////////////////////////
+	//				CAPACITY MANAGEMENT						///
+	//////////////////////////////////////////////////////////
+
+	// the following are const because these functions shouldn't change the data inside the vector itself
+	size_t size() const;
+	size_t max_size() const; // returns capacity
+
+	// just so we don't have to constantly check array_list.size() != 0
+	bool is_empty();
+	const bool is_empty() const;
+
+	/* runs whenever we need to resize the array to have greater capacity;
+	 also just realized we can use this whenever we want to change size of the arraylist
+	*/
+	bool resize(size_t new_length);
 
 	////////////////////////////////////////////////////////////
 	//				NICE TO HAVES							///
@@ -119,6 +137,91 @@ public:
 	std::string to_string() const;
 };
 
+template <typename Data> class ArrayList<Data>::Iterator
+{
+public:
+	// members of a struct are auto-public
+	using iterator_category = std::forward_iterator_tag;
+	using difference_type = std::ptrdiff_t;
+	using value_type = Data;
+	using pointer = Data*;  // or also value_type*
+	using reference = Data&;  // or also value_type&
+
+	Iterator(pointer ptr) : current_ptr(ptr) {};
+
+	reference operator*() const {
+		return *current_ptr;
+	}
+
+	// make this const so we can use this in const
+	// will not be able to edit the data inside the pointer
+
+	pointer operator->()
+	{
+		return current_ptr;
+	}
+
+	// make this const so we can use this in const
+	const pointer operator->() const
+	{
+		return current_ptr;
+	}
+
+	Iterator& operator++()
+	{
+		current_ptr++;
+		return *this;
+	}
+
+	Iterator operator++(int) {
+		Iterator temp = *this; ++(*this); return temp;
+	}
+
+	Iterator& operator--()
+	{
+		current_ptr--;
+		return *this;
+	}
+
+	Iterator operator--(int) {
+		Iterator temp = *this; ++(*this); return temp;
+	}
+
+	
+	// also using https://www.learncpp.com/cpp-tutorial/overloading-the-comparison-operators/
+	bool operator== (const Iterator& b) 
+	{ 
+		return current_ptr == b.current_ptr; 
+	};
+
+	bool operator!= (const Iterator& b)
+	{
+		return current_ptr != b.current_ptr;
+	};
+
+	bool operator< (const Iterator& b)
+	{
+		return current_ptr < b.current_ptr;
+	};
+
+	bool operator> (const Iterator& b)
+	{
+		return current_ptr > b.current_ptr;
+	};
+
+	bool operator<= (const Iterator& b)
+	{
+		return current_ptr <= b.current_ptr;
+	};
+
+	bool operator>= (const Iterator& b)
+	{
+		return current_ptr >= b.current_ptr;
+	};
+
+private:
+	pointer current_ptr; // points to an element of ArrayList
+};
 
 template <typename Data> void ArrayList<Data>::setup()
 {
@@ -135,7 +238,7 @@ template <typename Data> void ArrayList<Data>::setup()
 	array = new Data[capacity];
 }
 
-template <typename Data> ArrayList<Data>::ArrayList(const unsigned int size)
+template <typename Data> ArrayList<Data>::ArrayList(const size_t size)
 {
 	// i'm just going to throw an error if the size is set to be less than to zero to make shit less weird to deal with
 	if (size < 0)
@@ -187,12 +290,12 @@ template <typename Data> ArrayList<Data>::~ArrayList()
 	delete[] array;
 }
 
-template <typename Data> Data& ArrayList<Data>::operator[](unsigned int index)
+template <typename Data> Data& ArrayList<Data>::operator[](size_t index)
 {
 	return array[index];
 }
 
-template <typename Data> const Data& ArrayList<Data>::operator[](unsigned int index) const
+template <typename Data> const Data& ArrayList<Data>::operator[](size_t index) const
 {
 	return array[index];
 }
@@ -227,12 +330,12 @@ template <typename Data> const Data& ArrayList<Data>::back() const
 	return array[length - 1];
 }
 
-template <typename Data> int ArrayList<Data>::size() const
+template <typename Data> size_t ArrayList<Data>::size() const
 {
 	return length;
 }
 
-template <typename Data> int ArrayList<Data>::max_size() const
+template <typename Data> size_t ArrayList<Data>::max_size() const
 {
 	return capacity;
 }
@@ -254,66 +357,89 @@ template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
 	array[length - 1] = new_data; // add thing on the end of the array
 }
 
-template <typename Data> Data& ArrayList<Data>::pop_back()
+template <typename Data> Data ArrayList<Data>::pop_back()
 {
 	Data popped_data = array[length - 1]; // copy data, since this wont exist after deleting the array
 	resize(length - 1); // technically unnecessary, as this will delete and create a new array, but for the sake of API consistency, this is fine
 	return popped_data;
 }
 
-template <typename Data> class ArrayList<Data>::Iterator
+template <typename Data> void ArrayList<Data>::erase(const Iterator iter)
 {
-public:
-	// members of a struct are auto-public
-	using iterator_category = std::forward_iterator_tag;
-	using difference_type = std::ptrdiff_t;
-	using value_type = Data;
-	using pointer = Data*;  // or also value_type*
-	using reference = Data&;  // or also value_type&
+	Data* new_array = new Data[length];
 
-	Iterator(pointer ptr) : current_ptr(ptr) {};
-
-	reference operator*() const {
-		return *current_ptr;
+	size_t index = 0;
+	// https://stackoverflow.com/a/14374550
+	for (auto it = begin(); it != end(); ++it)
+	{
+		// skip data we're erasing
+		if (it == iter)
+		{
+			continue;
+		}
+		new_array[index] = *it;
+		++index;
 	}
 
-	// make this const so we can use this in const
-	// will not be able to edit the data inside the pointer
+	delete[] array;
+	array = new_array;
 
-	pointer operator->()
+	// index is now the length of the new array
+	// this means we can now resize to the length of the new array
+	// this will create another array, which will probably waste memory, but oh well
+	resize(index);
+}
+
+template <typename Data> 
+void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
+{
+	Data* new_array = new Data[length];
+
+	size_t index = 0;
+	// https://stackoverflow.com/a/14374550
+	for (auto it = begin(); it != end(); ++it)
 	{
-		return current_ptr;
+		// skip data we're erasing
+		// erase starting from beginning but stop before last
+		if (it >= begin_erase  && it < end_erase)
+		{
+			continue;
+		}
+		new_array[index] = *it;
+		++index;
 	}
 
-	// make this const so we can use this in const
-	const pointer operator->() const
-	{
-		return current_ptr;
-	}
+	delete[] array;
+	array = new_array;
 
-	Iterator& operator++()
-	{
-		current_ptr++;
-		return *this;
-	}
+	// index is now the length of the new array
+	// this means we can now resize to the length of the new array
+	// this will create another array, which will probably waste memory, but oh well
+	resize(index);
+}
 
-	Iterator operator++(int) {
-		Iterator temp = *this; ++(*this); return temp;
-	}
-	// setting these as "friend" is a handy way to define the operators as non-member functions, yet being able to access private parts of the Iterator class 
-	// https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421729#4421729
-	bool operator== (const Iterator& other) const
-	{
-		return current_ptr == other.current_ptr;
-	};
-	bool operator!= (const Iterator& other) const
-	{
-		return current_ptr != other.current_ptr;
-	};
+template <typename Data> void ArrayList<Data>::remove_at(size_t index)
+{
+	erase(iterator_at(index));
+}
 
-private:
-	pointer current_ptr; // points to an element of ArrayList
-};
+template <typename Data> void ArrayList<Data>::remove_between(size_t start, size_t end)
+{
+	erase(iterator_at(start), iterator_at(end));
+}
+
+template <typename Data> Data ArrayList<Data>::pop_at(size_t index)
+{
+	Data data_popped = array[index];
+	erase(iterator_at(index));
+	return Data;
+}
+
+/*TODO: implement this
+template <typename Data> Data& ArrayList<Data>::pop_at(size_t position)
+{
+}
+*/
 
 // have to put typename before ArrayList<Data>::Iterator to tell the compiler that Iterator is a type
 // see https://stackoverflow.com/a/1600968
@@ -330,7 +456,7 @@ const typename ArrayList<Data>::Iterator ArrayList<Data>::begin() const
 }
 
 template <typename Data> 
-const typename ArrayList<Data>::Iterator ArrayList<Data>::const_begin() const
+const typename ArrayList<Data>::Iterator ArrayList<Data>::cbegin() const
 {
 	return Iterator(&array[0]); // get pointer to beginning of the array
 }
@@ -348,21 +474,33 @@ const typename ArrayList<Data>::Iterator ArrayList<Data>::end() const
 }
 
 template <typename Data> 
-const typename ArrayList<Data>::Iterator ArrayList<Data>::const_end() const
+const typename ArrayList<Data>::Iterator ArrayList<Data>::cend() const
 {
 	return Iterator(&array[length]); // get pointer to end of the array
 }
 
+template <typename Data>
+typename ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index)
+{
+	return Iterator(&array[index]); // get pointer at this specific index
+}
+
+template <typename Data>
+typename const ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index) const
+{
+	return Iterator(&array[index]); // get pointer at this specific index
+}
+
 
 // this will delete objects after new_length if new_length is smaller than the current size
-template <typename Data>  bool ArrayList<Data>::resize(int new_length)
+template <typename Data>  bool ArrayList<Data>::resize(size_t new_length)
 {
 	length = new_length;
 	capacity = 2 * length;
 
 	Data* new_array = new Data[capacity];
 	// copy stuff from old array to new array
-	for (int i = 0; i < length; ++i)
+	for (size_t i = 0; i < length; ++i)
 	{
 		new_array[i] = array[i];
 	}
