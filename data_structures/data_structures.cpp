@@ -24,7 +24,7 @@ int main()
         n = n->next;
     }
     std::cout << "print ArrayList\n";
-    ArrayList vector(2);
+    ArrayList<int> vector(2);
     for (int i = 0; i < vector.size(); ++i)
     {
         std::cout << vector[i] << "\n";
@@ -37,7 +37,7 @@ int main()
 
     // test pushback
     std::cout << "Pushback test" << "\n";
-    ArrayList second_vec;
+    ArrayList<int> second_vec;
     second_vec.push_back(12);
     for (int i = 0; i < second_vec.size(); ++i)
     {
