@@ -58,7 +58,15 @@ public:
 	Data& back();
 	const Data& back() const;
 
+	////////////////////////////////////////////////////////////
+	//				CHANGING DATA							///
+	//////////////////////////////////////////////////////////
+
 	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
+	Data& pop_back(); // returns the last element as we remove it from the array
+
+	// if we want to delete everything and reset it
+	void clear();
 
 	////////////////////////////////////////////////////////////
 	//				CAPACITY MANAGEMENT						///
@@ -67,13 +75,14 @@ public:
 	// the following are const because these functions shouldn't change the data inside the vector itself
 	int size() const;
 	int max_size() const; // returns capacity
+	
+	// just so we don't have to constantly check array_list.size() != 0
+	bool is_empty();
+	const bool is_empty() const;
 
 	// runs whenever we need to resize the array to have greater capacity;
 	// also just realized we can use this whenever we want to change size of the arraylist
 	bool resize(int new_length);
-
-	// if we want to delete everything and reset it
-	void clear();
 
 	////////////////////////////////////////////////////////////
 	//				NICE TO HAVES							///
@@ -200,11 +209,28 @@ template <typename Data> int ArrayList<Data>::max_size() const
 	return capacity;
 }
 
+template <typename Data> bool ArrayList<Data>::is_empty() 
+{
+	return length == 0;
+}
+
+template <typename Data> const bool ArrayList<Data>::is_empty() const
+{
+	return length == 0;
+}
+
 template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
 {
 	++length; // increase length since we're adding something at the end
 	resize(length);
 	array[length - 1] = new_data; // add thing on the end of the array
+}
+
+template <typename Data> Data& ArrayList<Data>::pop_back()
+{
+	Data popped_data = array[length - 1]; // copy data, since this wont exist after deleting the array
+	resize(length - 1); // technically unnecessary, as this will delete and create a new array, but for the sake of API consistency, this is fine
+	return popped_data;
 }
 
 // this will delete objects after new_length if new_length is smaller than the current size

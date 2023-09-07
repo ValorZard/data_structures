@@ -43,7 +43,7 @@ int main()
     second_vec.push_back(125);
     second_vec.push_back(126);
     std::cout << "size of vec: " << second_vec.size() << " max size of vec: " << second_vec.max_size() << " vec: " << second_vec.to_string() << "\n";
-    
+   
     // do sorting stuff
     std::cout << "doing sorting" << "\n";
     ArrayList<int> unsorted_vec = second_vec;
@@ -59,6 +59,14 @@ int main()
     // this caused horrible bugs before we added a copy constructor
     ArrayList<int> sorted_vec = selection_sort(unsorted_vec);
     std::cout << "unsorted array: " << unsorted_vec.to_string() << " sorted array: " << sorted_vec.to_string() << "\n";
+
+    // popping data
+    std::cout << "popping unsorted array" << "\n";
+    while (!unsorted_vec.is_empty())
+    {
+        int popped_data = unsorted_vec.pop_back();
+        std::cout << popped_data << "\n";
+    }
 
     // resize
     sorted_vec.resize(4);
