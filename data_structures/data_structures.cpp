@@ -126,11 +126,22 @@ int main()
 
     std::cout << "We've screwed up this vector enough, lets shuffle it" << test_vec.to_string() << "\n";
 
-    //test_vec = insertion_sort(test_vec);
+    //test_vec = merge_sort(test_vec);
 
-    //std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
+    std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
 
-    // randomly generate 10 numbers
+    // insertion test
+    ArrayList<int> insertion_vec;
+    for (int i = 0; i < 10; ++i)
+    {
+        insertion_vec.push_back(i);
+    }
+    std::cout << "We're inserting 69 into this: " << insertion_vec.to_string() << "\n";
+    insertion_vec.insert(insertion_vec.begin(), 69);
+    std::cout << "Check if it worked..: " << insertion_vec.to_string() << "\n";
+    std::cout << "We're inserting 42 into this 4 times: " << insertion_vec.to_string() << "\n";
+    insertion_vec.insert(insertion_vec.begin() + 4, 4, 42);
+    std::cout << "Check if it worked..: " << insertion_vec.to_string() << "\n";
 
 
     // binary search tree

@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iterator> // For std::forward_iterator_tag
 #include <cstddef>  // For std::ptrdiff_t
+#include <algorithm>
 
 // ArrayList is equivalent to std::vector
 // Influenced by https://github.com/Miguel-Deniz/Vector-Implementation/
@@ -17,6 +18,7 @@ private:
 	Data* array;
 	size_t length; // the current length of all actual values
 	size_t capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
+
 	void setup(const size_t size = 0); // reuse for different constructors
 public:
 	////////////////////////////////////////////////////////////
@@ -120,6 +122,10 @@ public:
 	// pop element at specific position
 	Data pop_at(size_t index);
 
+	// using Iterator to insert elements
+	void insert(Iterator position, Data value);
+	void insert(Iterator position, size_t amount, Data value);
+
 	////////////////////////////////////////////////////////////
 	//				CAPACITY MANAGEMENT						///
 	//////////////////////////////////////////////////////////
@@ -135,7 +141,10 @@ public:
 	/* runs whenever we need to resize the array to have greater capacity;
 	 also just realized we can use this whenever we want to change size of the arraylist
 	*/
-	bool resize(size_t new_length);
+	bool resize(size_t new_length, Data value = 0);
+
+	// runs when we want to make sure we can fit at least n elements in the capacity
+	void reserve(size_t new_capacity);
 
 	////////////////////////////////////////////////////////////
 	//				NICE TO HAVES							///
@@ -252,17 +261,16 @@ template <typename Data>
 inline void ArrayList<Data>::setup(const size_t size)
 {
 	this->length = size;
-	// capacity : the actual size of the array to make it bigger
-	if (length == 0)
-	{
-		capacity = 1; // make the array at least have the space for one element
-	}
-	else
-	{
-		capacity = length * 2; // else double the size of the array so we can optimize memory assignment
-	}
+	// let's assume that we don't need to make the array bigger than it is already
+	// If we do need to change the size, that will be handled by resize()
+	this->capacity = this->length;
 	// make sure the values of the array are all default
 	array = new Data[capacity];
+
+	for (size_t i = 0; i < capacity; ++i)
+	{
+		array[i] = 0;
+	}
 }
 
 template <typename Data> 
@@ -283,18 +291,10 @@ template<typename Data>
 template<typename OutsideIterator>
 inline ArrayList<Data>::ArrayList(OutsideIterator first, OutsideIterator last)
 {
-	setup();
+	setup(last-first);
 
-	OutsideIterator it = first;
+	std::copy(first, last, array);
 
-	//int number_of_elements = std::distance(first, last);
-
-	while (it != last)
-	{
-		std::cout << "aa" << "\n";
-		push_back(*it);
-		++it;
-	}
 }
 
 template<typename Data>
@@ -311,13 +311,8 @@ inline ArrayList<Data>::ArrayList(const Data data_array[], const size_t size)
 template <typename Data> ArrayList<Data>::ArrayList(const ArrayList& old)
 {
 	// do basic setup before we do anything too crazy
-	setup();
-	// this should work fine i think, unless we horribly fuck things up
-	// since this will result in something the same size as the other array list with all the data in the right place
-	for (Data& data : old) {
-		// get each of the data from the old ArrayList and put it into this one
-		push_back(data);
-	}
+	setup(old.end() - old.begin());
+	std::copy(old.begin(), old.end(), array);
 }
 
 template <typename Data> ArrayList<Data>& ArrayList<Data>::operator=(const ArrayList<Data>& old)
@@ -330,9 +325,8 @@ template <typename Data> ArrayList<Data>& ArrayList<Data>::operator=(const Array
 	// reset the object
 	clear();
 
-	for (Data& data : old) {
-		push_back(data);
-	}
+	setup(old.end() - old.begin());
+	std::copy(old.begin(), old.end(), array);
 
 	return *this;
 }
@@ -433,7 +427,7 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 		if (it == iter)
 		{
 			// make sure to decrease size by one now that we know we have erased the data
-			--size;
+			length -= 1;
 			continue;
 		}
 		new_array[index] = *it;
@@ -467,8 +461,8 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 		// erase starting from beginning but stop before last
 		if (it >= begin_erase  && it < end_erase)
 		{
-			// make sure to decrease size by one now that we know we have erased the data
-			--size;
+			// make sure to decrease length by one now that we know we have erased the data
+			length -= 1;
 			continue;
 		}
 		// idk why this generates an errror
@@ -478,11 +472,6 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 
 	delete[] array;
 	array = new_array;
-
-	// index is now the length of the new array
-	// this means we can now resize to the length of the new array
-	// this will create another array, which will probably waste memory, but oh well
-	resize(index);
 }
 
 template <typename Data> void ArrayList<Data>::remove_at(size_t index)
@@ -502,11 +491,90 @@ template <typename Data> Data ArrayList<Data>::pop_at(size_t index)
 	return Data;
 }
 
-/*TODO: implement this
-template <typename Data> Data& ArrayList<Data>::pop_at(size_t position)
+template<typename Data>
+inline void ArrayList<Data>::insert(Iterator position, Data value)
 {
+	size_t index_of_inserted_value = position - begin();
+	if (index_of_inserted_value > length)
+	{
+		// we can't insert that doesn't exist
+		// inserting at length is fine because thats just equivalent to push_back()
+		throw std::length_error("we can't insert that at a position which doesn't exist");
+	}
+
+	// the length is now increased by one, so we should resize
+	resize(length + 1);
+
+	// this is like a reverse insertion sort
+
+	// shuffle everything up by one
+	Data old_value = array[index_of_inserted_value];
+	
+	// shuffle up by 1 and replace each old value with new value
+	// ex. 10 9 8 7 -> 1 10 9 8 7
+	for (size_t shuffle_index = index_of_inserted_value; shuffle_index < length; ++shuffle_index)
+	{
+		array[shuffle_index] = old_value; // set the current index to the old data before this one (shuffle_index - 1);
+		old_value = array[shuffle_index + 1]; // now this shuffle index is old value
+	}
+	// now set our now emptied slot to our value
+	array[index_of_inserted_value] = value;
 }
-*/
+
+template<typename Data>
+inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value)
+{
+	size_t index_of_inserted_value = position - begin();
+	std::cout << *position << "\n";
+	if (index_of_inserted_value > length)
+	{
+		// we can't insert that doesn't exist
+		// inserting at length is fine because thats just equivalent to push_back()
+		throw std::length_error("we can't insert that at a position which doesn't exist");
+	}
+
+	// the length is now increased by amount, so we should resize
+	size_t old_length = length;
+	length += amount;
+
+	// we should resize the array if necessary
+	Data* new_array;
+	if (length > capacity)
+	{
+		capacity = 2 * length;
+	}
+	new_array = new Data[capacity];
+
+
+	// fill in everything before like normal
+	
+	for (size_t index = 0; index < index_of_inserted_value; ++index)
+	{
+		new_array[index] = array[index];
+	}
+	
+	// fill up the amount indexs with value
+	for (size_t i = index_of_inserted_value; i < index_of_inserted_value + amount; ++i)
+	{
+		new_array[i] = value;
+	}
+
+	// keep iterating through the new array while remembering the offset
+	for (size_t index = index_of_inserted_value + amount; index < length; ++index)
+	{
+		new_array[index] = array[index - amount];
+	}
+
+	// for everything else, make sure its zero
+	for (size_t index = length; index < capacity; ++index)
+	{
+		new_array[index] = 0;
+	}
+
+	delete[] array;
+	array = new_array;
+}
+
 
 // have to put typename before ArrayList<Data>::Iterator to tell the compiler that Iterator is a type
 // see https://stackoverflow.com/a/1600968
@@ -553,7 +621,8 @@ inline typename ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t in
 }
 
 template <typename Data>
-inline typename const ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index) const
+typename const ArrayList<Data>::Iterator 
+inline ArrayList<Data>::iterator_at(size_t index) const
 {
 	return Iterator(&array[index]); // get pointer at this specific index
 }
@@ -587,22 +656,55 @@ If n is also greater than the current container capacity, an automatic reallocat
 Notice that this function changes the actual content of the container by inserting or erasing elements from it.
 */
 template <typename Data>  
-inline bool ArrayList<Data>::resize(size_t new_length)
+inline bool ArrayList<Data>::resize(size_t new_length, Data value)
 {
 	length = new_length;
-	capacity = 2 * length;
-
-	Data* new_array = new Data[capacity];
-	// copy stuff from old array to new array
-	for (size_t i = 0; i < length; ++i)
+	if (length > capacity)
 	{
-		new_array[i] = array[i];
+		capacity = 2 * length;
+
+		Data* new_array = new Data[capacity];
+		// copy stuff from old array to new array
+		for (size_t i = 0; i < length; ++i)
+		{
+			new_array[i] = array[i];
+		}
+		// delete old array and set it to new array
+		delete array;
+		array = new_array;
+		return true; // return true if we did change the array's capacity
 	}
-	// delete old array and set it to new array
-	delete array;
-	array = new_array;
-	return true; // return true if we did resize the array
+	else
+	{
+		// fill up all the empty slots in the array with value
+		for (size_t i = new_length; i < capacity; ++i)
+		{
+			array[i] = value;
+		}
+	}
+
 }
+
+template <typename Data>
+inline void ArrayList<Data>::reserve(size_t new_capacity)
+{
+	if (new_capacity > capacity)
+	{
+		capacity = 2 * new_capacity; // double capacity just in case
+
+		Data* new_array = new Data[capacity];
+		// copy stuff from old array to new array
+		for (size_t i = 0; i < length; ++i)
+		{
+			new_array[i] = array[i];
+		}
+		// delete old array and set it to new array
+		delete array;
+		array = new_array;
+		return true; // return true if we did change the array's capacity
+	}
+}
+
 
 template <typename Data> 
 inline void ArrayList<Data>::clear()
