@@ -159,9 +159,9 @@ template <typename Data> ArrayList<Data>::ArrayList(const ArrayList& old)
 	setup();
 	// this should work fine i think, unless we horribly fuck things up
 	// since this will result in something the same size as the other array list with all the data in the right place
-	for (int i = 0; i < old.length; ++i) {
+	for (Data& data : old) {
 		// get each of the data from the old ArrayList and put it into this one
-		push_back(old.array[i]);
+		push_back(data);
 	}
 }
 
@@ -175,8 +175,8 @@ template <typename Data> ArrayList<Data>& ArrayList<Data>::operator=(const Array
 	// reset the object
 	clear();
 
-	for (int i = 0; i < old.size(); ++i) {
-		push_back(old.array[i]);
+	for (Data& data : old) {
+		push_back(data);
 	}
 
 	return *this;
@@ -384,8 +384,8 @@ template <typename Data>  std::string ArrayList<Data>::to_string() const
 {
 	std::string list_string = "[";
 
-	for (auto it = begin(); it != end(); ++it) {
-		list_string += std::to_string(*it) + ",";
+	for (Data& data : *this) {
+		list_string += std::to_string(data) + ",";
 	}
 
 	list_string += "]";
