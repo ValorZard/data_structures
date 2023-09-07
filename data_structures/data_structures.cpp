@@ -73,6 +73,19 @@ int main()
     std::cout << "resized: " << sorted_vec.to_string() << "\n";
     std::cout << "front: " << sorted_vec.front() << " back: " << sorted_vec.back() << "\n";
 
+    // check if for each loop works
+    ArrayList<int> test_vec;
+    for (int i = 0; i < 100; ++i)
+    {
+        test_vec.push_back(i);
+    }
+
+    std::cout << "Test ForEach" << "\n";
+    for (int num : test_vec)
+    {
+        std::cout << num << "\n";
+    }
+    std::cout << "ForEach Works!" << "\n";
 
     // binary search tree
     BinarySearchTree bst;

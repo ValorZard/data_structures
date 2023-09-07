@@ -1,8 +1,11 @@
 #pragma once
 #include <stdexcept>
 #include <string>
-#include <math.h> 
-// equivalent to std::vector
+#include <math.h>
+#include <iterator> // For std::forward_iterator_tag
+#include <cstddef>  // For std::ptrdiff_t
+
+// ArrayList is equivalent to std::vector
 
 template <typename Data>
 class ArrayList
@@ -39,14 +42,14 @@ public:
 	// for const correctness, we should also have a const version of this function when ArrayList is const
 	// https://isocpp.org/wiki/faq/const-correctness
 	const Data& operator[](unsigned int) const;
-	
+
 	////////////////////////////////////////////////////////////
 	//				ARRAY MANAGEMENT						///
 	//////////////////////////////////////////////////////////
 
 	// if we want to get the array inside of the array_list
 	Data* get_array();
-	
+
 	// have a const version too just in case
 	const Data* get_array() const;
 
@@ -75,14 +78,39 @@ public:
 	// the following are const because these functions shouldn't change the data inside the vector itself
 	int size() const;
 	int max_size() const; // returns capacity
-	
+
 	// just so we don't have to constantly check array_list.size() != 0
 	bool is_empty();
 	const bool is_empty() const;
 
-	// runs whenever we need to resize the array to have greater capacity;
-	// also just realized we can use this whenever we want to change size of the arraylist
+	/* runs whenever we need to resize the array to have greater capacity;
+	 also just realized we can use this whenever we want to change size of the arraylist
+	*/
 	bool resize(int new_length);
+
+	////////////////////////////////////////////////////////////
+	//						ITERATORS						///
+	//////////////////////////////////////////////////////////
+
+	/* we should also make an iterator for this class
+		https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
+		This is meant to handle all the nasty pointer arthmetic and other bullshit for us
+		(We define it later in this file)
+	*/
+	class Iterator;
+
+	// Having begin() and end() will make for each loops "just work" since they are looking under the hood for begin() and end()
+
+	Iterator begin();
+	const Iterator begin() const;
+
+	Iterator end();
+	const Iterator end() const;
+
+	// these two versions of begin and end work when we want the iterator to not change any of the data inside of the array_List
+	const Iterator const_begin() const;
+	const Iterator const_end() const;
+
 
 	////////////////////////////////////////////////////////////
 	//				NICE TO HAVES							///
@@ -91,6 +119,7 @@ public:
 	// this should be const even though we're creating a string, we are not touching any data
 	std::string to_string() const;
 };
+
 
 template <typename Data> void ArrayList<Data>::setup()
 {
@@ -209,7 +238,7 @@ template <typename Data> int ArrayList<Data>::max_size() const
 	return capacity;
 }
 
-template <typename Data> bool ArrayList<Data>::is_empty() 
+template <typename Data> bool ArrayList<Data>::is_empty()
 {
 	return length == 0;
 }
@@ -232,6 +261,93 @@ template <typename Data> Data& ArrayList<Data>::pop_back()
 	resize(length - 1); // technically unnecessary, as this will delete and create a new array, but for the sake of API consistency, this is fine
 	return popped_data;
 }
+
+template <typename Data> class ArrayList<Data>::Iterator
+{
+public:
+	// members of a struct are auto-public
+	using iterator_category = std::forward_iterator_tag;
+	using difference_type = std::ptrdiff_t;
+	using value_type = Data;
+	using pointer = Data*;  // or also value_type*
+	using reference = Data&;  // or also value_type&
+
+	Iterator(pointer ptr) : current_ptr(ptr) {};
+
+	reference operator*() const {
+		return *current_ptr;
+	}
+
+	// make this const so we can use this in const
+	// will not be able to edit the data inside the pointer
+
+	pointer operator->()
+	{
+		return current_ptr;
+	}
+
+	// make this const so we can use this in const
+	const pointer operator->() const
+	{
+		return current_ptr;
+	}
+
+	Iterator& operator++()
+	{
+		current_ptr++;
+		return *this;
+	}
+
+	Iterator operator++(int) {
+		Iterator temp = *this; ++(*this); return temp;
+	}
+	// setting these as "friend" is a handy way to define the operators as non-member functions, yet being able to access private parts of the Iterator class 
+	// https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421729#4421729
+	bool operator== (const Iterator& other) const
+	{
+		return current_ptr == other.current_ptr;
+	};
+	bool operator!= (const Iterator& other) const
+	{
+		return current_ptr != other.current_ptr;
+	};
+
+private:
+	pointer current_ptr; // points to an element of ArrayList
+};
+
+// have to put typename before ArrayList<Data>::Iterator to tell the compiler that Iterator is a type
+// see https://stackoverflow.com/a/1600968
+template <typename Data> 
+typename ArrayList<Data>::Iterator ArrayList<Data>::begin()
+{
+	return Iterator(&array[0]); // get pointer to beginning of the array
+}
+
+template <typename Data> 
+const typename ArrayList<Data>::Iterator ArrayList<Data>::begin() const
+{
+	return Iterator(&array[0]); // get pointer to beginning of the array
+}
+
+template <typename Data> 
+const typename ArrayList<Data>::Iterator ArrayList<Data>::const_begin() const
+{
+	return Iterator(&array[0]); // get pointer to beginning of the array
+}
+
+template <typename Data> 
+typename ArrayList<Data>::Iterator ArrayList<Data>::end()
+{
+	return Iterator(&array[length]); // get pointer to end of the array (There should be nothing here and that's the point)
+}
+
+template <typename Data> 
+const typename ArrayList<Data>::Iterator ArrayList<Data>::const_end() const
+{
+	return Iterator(&array[length]); // get pointer to end of the array
+}
+
 
 // this will delete objects after new_length if new_length is smaller than the current size
 template <typename Data>  bool ArrayList<Data>::resize(int new_length)
