@@ -60,6 +60,10 @@ int main()
     ArrayList<int> sorted_vec = selection_sort(unsorted_vec);
     std::cout << "unsorted array: " << unsorted_vec.to_string() << " sorted array: " << sorted_vec.to_string() << "\n";
 
+    // resize
+    sorted_vec.resize(4);
+    std::cout << "resized: " << sorted_vec.to_string() << "\n";
+
 
     // binary search tree
     BinarySearchTree bst;

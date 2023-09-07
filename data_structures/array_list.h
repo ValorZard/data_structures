@@ -1,6 +1,7 @@
 #pragma once
 #include <stdexcept>
 #include <string>
+#include <math.h> 
 // equivalent to std::vector
 
 template <typename Data>
@@ -48,7 +49,7 @@ public:
 	bool resize(int new_length);
 
 	// if we want to delete everything and reset it
-	void reset();
+	void clear();
 
 	// this should be const even though we're creating a string, we are not touching any data
 	std::string to_string() const;
@@ -107,7 +108,7 @@ template <typename Data> ArrayList<Data>& ArrayList<Data>::operator=(const Array
 	}
 
 	// reset the object
-	reset();
+	clear();
 
 	for (int i = 0; i < old.size(); ++i) {
 		push_back(old.array[i]);
@@ -148,27 +149,25 @@ template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
 	array[length - 1] = new_data; // add thing on the end of the array
 }
 
+// this will delete objects after new_length if new_length is smaller than the current size
 template <typename Data>  bool ArrayList<Data>::resize(int new_length)
 {
-	// double capacity if the array has become too big
-	if (new_length >= capacity)
+	length = new_length;
+	capacity = 2 * length;
+
+	Data* new_array = new Data[capacity];
+	// copy stuff from old array to new array
+	for (int i = 0; i < length; ++i)
 	{
-		capacity *= 2;
-		Data* new_array = new Data[capacity];
-		// copy stuff from old array to new array
-		for (int i = 0; i < new_length; ++i)
-		{
-			new_array[i] = array[i];
-		}
-		// delete old array and set it to new array
-		delete array;
-		array = new_array;
-		return true; // return true if we did resize the array
+		new_array[i] = array[i];
 	}
-	return false; // we didn't resize the array, false
+	// delete old array and set it to new array
+	delete array;
+	array = new_array;
+	return true; // return true if we did resize the array
 }
 
-template <typename Data> void ArrayList<Data>::reset()
+template <typename Data> void ArrayList<Data>::clear()
 {
 	// reset everything
 	this->length = 0;
