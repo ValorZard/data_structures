@@ -445,6 +445,7 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 }
 
 /* THIS CAN BE OPTIMIZED BETTER
+* https://cplusplus.com/reference/vector/vector/erase/
 * Removes from the vector either a single element (position) or a range of elements ([first,last)).
 
 	This effectively reduces the container size by the number of elements removed, which are destroyed.
@@ -572,6 +573,8 @@ typename bool ArrayList<Data>::has(const Data& data) const
 /*
 this will delete objects after new_length if new_length is smaller than the current size
  we should optimize this better
+
+ https://cplusplus.com/reference/vector/vector/resize/
 
  Resizes the container so that it contains n elements.
 
