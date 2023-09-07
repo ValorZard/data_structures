@@ -66,14 +66,18 @@ ArrayList<int> insertion_sort(ArrayList<int> array_list) // let's not change the
 		// going down the subarray, sort all the data not in order
 		// since we're starting with a subarray of one, it HAS to be sorted properly
 		// and then each time we have something not in order, we can just shuffle it down until it is sorted
-		// ex. 10, 9, 7, 14, 11 -> [10], 9, 8, 14, 11 -> [10, 9] , 8, 14, 11 -> [9, 10] , 8, 14, 11 
+		// ex. [10], 9, 7, 14, 11 -> [10, [9]] , 8, 14, 11 -> [10, 10] , 8, 14, 11 -> [[9], 10] , 8, 14, 11 
+		// -> [[9, 10] ,[8]] , 14, 11 -> [[9, [8] , 10] , 14, 11 -> [[8], 9 , 10 , 14, 11
 		// and so on
 		while (sorted_index >= 0 && array_list[sorted_index] > data_being_sorted)
 		{
-			array_list[sorted_index - 1] = array_list[sorted_index];
+			array_list[sorted_index + 1] = array_list[sorted_index];
 			--sorted_index;
 		}
-
+		
+		// During the first round, sorted_index will actually be -1, so sorted_index + 1 = 0
+		// this mean that sorted_index + 1 is where the final insertion should be
+		// sorted_index + 1 is also the last element in the sorted subarray
 		array_list[sorted_index + 1] = data_being_sorted;
 
 		++current_index_being_sorted;

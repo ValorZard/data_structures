@@ -82,7 +82,7 @@ int main()
 
     std::cout << "Vector we're going to sort: " << insertion_sort_vec.to_string() << "\n";
 
-    //insertion_sort_vec = insertion_sort(insertion_sort_vec);
+    insertion_sort_vec = insertion_sort(insertion_sort_vec);
 
     std::cout << "It's sorted! -> " << insertion_sort_vec.to_string() << "\n";
 
@@ -128,7 +128,7 @@ int main()
 
     //test_vec = insertion_sort(test_vec);
 
-    std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
+    //std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
 
     // randomly generate 10 numbers
 
