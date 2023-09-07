@@ -423,6 +423,9 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 	Data* new_array = new Data[capacity];
 
 	size_t index = 0;
+
+	bool position_exists = false;
+
 	// https://stackoverflow.com/a/14374550
 	for (auto it = begin(); it != end(); ++it)
 	{
@@ -430,13 +433,18 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 		if (it == iter)
 		{
 			// make sure to decrease size by one now that we know we have erased the data
-			length -= 1;
+			position_exists = true;
 		}
 		else
 		{
 			new_array[index] = *it;
 			++index;
 		}
+	}
+
+	if (position_exists)
+	{
+		length -= 1;
 	}
 
 	delete[] array;
@@ -459,6 +467,9 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 	Data* new_array = new Data[capacity];
 
 	size_t index = 0;
+
+	size_t amount_erased = 0;
+
 	// https://stackoverflow.com/a/14374550
 	for (auto it = begin(); it != end(); ++it)
 	{
@@ -467,7 +478,7 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 		if (it >= begin_erase  && it < end_erase)
 		{
 			// make sure to decrease length by one now that we know we have erased the data
-			length -= 1;
+			amount_erased += 1;
 		}
 		else
 		{
@@ -476,6 +487,8 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 			++index;
 		}
 	}
+
+	length -= amount_erased;
 
 	delete[] array;
 	array = new_array;

@@ -9,6 +9,18 @@
 #include <algorithm> // for random shuffle
 #include <array>
 
+std::string array_list_string(ArrayList<int> array_list)
+{
+    std::string list_string = "[";
+    for (size_t i = 0; i < array_list.size(); ++i)
+    {
+        list_string += std::to_string(array_list[i]) + ",";
+    }
+    list_string += "]";
+    
+    return list_string;
+}
+
 int main()
 {
     std::cout << "Hello World!\n";
@@ -127,6 +139,8 @@ int main()
     std::cout << "Checking a random element to see if it's not junk data: " << *(test_vec.end() - 4) << "\n";
 
     std::cout << "Since test_vec has 81, erase all values between 81 and the end of the vec " << test_vec.to_string() << "\n";
+
+    std::cout << "Let's try another way to print out the thing: " << array_list_string(test_vec) << "\n";
 
     std::random_shuffle(test_vec.begin(), test_vec.end());
 
