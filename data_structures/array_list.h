@@ -123,10 +123,10 @@ public:
 	Data pop_at(size_t index);
 
 	// using Iterator to insert elements
-	template <class InputIterator> void insert(InputIterator position, Data value);
-	template <class InputIterator> void insert(InputIterator position, size_t amount, Data value);
+	void insert(Iterator position, Data value);
+	void insert(Iterator position, size_t amount, Data value);
 	// starts from the first but ends before the last
-	template <class InputIterator> void insert(InputIterator position, InputIterator first, InputIterator last);
+	void insert(Iterator position, Iterator first, Iterator last);
 
 	////////////////////////////////////////////////////////////
 	//				CAPACITY MANAGEMENT						///
@@ -499,8 +499,7 @@ template <typename Data> Data ArrayList<Data>::pop_at(size_t index)
 }
 
 template<typename Data>
-template <class InputIterator>
-inline void ArrayList<Data>::insert(InputIterator position, Data value)
+inline void ArrayList<Data>::insert(Iterator position, Data value)
 {
 	size_t index_of_inserted_value = position - begin();
 	if (index_of_inserted_value > length)
@@ -530,8 +529,7 @@ inline void ArrayList<Data>::insert(InputIterator position, Data value)
 }
 
 template<typename Data>
-template <class InputIterator>
-inline void ArrayList<Data>::insert(InputIterator position, size_t amount, Data value)
+inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value)
 {
 	size_t index_of_inserted_value = position - begin();
 	if (index_of_inserted_value > length)
@@ -584,8 +582,7 @@ inline void ArrayList<Data>::insert(InputIterator position, size_t amount, Data 
 }
 
 template<typename Data>
-template <class InputIterator>
-inline void ArrayList<Data>::insert(InputIterator position, InputIterator first, InputIterator last)
+inline void ArrayList<Data>::insert(Iterator position, Iterator first, Iterator last)
 {
 	size_t index_of_inserted_value = position - begin();
 	if (index_of_inserted_value > length)
