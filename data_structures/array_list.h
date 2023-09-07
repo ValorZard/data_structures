@@ -441,7 +441,8 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 			++index;
 		}
 	}
-
+	
+	// don't change length while your iterating, else bad things will happen
 	if (position_exists)
 	{
 		length -= 1;
@@ -488,6 +489,7 @@ inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator en
 		}
 	}
 
+	// don't change length while your iterating, else bad things will happen
 	length -= amount_erased;
 
 	delete[] array;
