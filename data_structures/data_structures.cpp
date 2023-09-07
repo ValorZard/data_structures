@@ -5,6 +5,7 @@
 #include "linked_list.h"
 #include "array_list.h"
 #include "binary_tree.h"
+#include "sorting.h"
 
 int main()
 {
@@ -25,10 +26,7 @@ int main()
     }
     std::cout << "print ArrayList\n";
     ArrayList<int> vector(2);
-    for (int i = 0; i < vector.size(); ++i)
-    {
-        std::cout << vector[i] << "\n";
-    }
+    std::cout << vector.to_string() << "\n";
 
     // can i set and change shit?
     vector[1] = 2;
@@ -36,22 +34,30 @@ int main()
     // IT DOES WORK WOOOO
 
     // test pushback
-    std::cout << "Pushback test" << "\n";
+    std::cout << "Pushback test (second vec)" << "\n";
     ArrayList<int> second_vec;
     second_vec.push_back(12);
-    for (int i = 0; i < second_vec.size(); ++i)
-    {
-        std::cout << second_vec[i] << "\n";
-    }
+    std::cout << second_vec.to_string() << "\n";
     second_vec.push_back(123);
     second_vec.push_back(124);
     second_vec.push_back(125);
     second_vec.push_back(126);
-    std::cout << "size of vec: " << second_vec.size() << " max size of vec: " << second_vec.max_size() << "\n";
-    for (int i = 0; i < second_vec.size(); ++i)
-    {
-        std::cout << second_vec[i] << "\n";
-    }
+    std::cout << "size of vec: " << second_vec.size() << " max size of vec: " << second_vec.max_size() << " vec: " << second_vec.to_string() << "\n";
+    
+    // do sorting stuff
+    std::cout << "doing sorting" << "\n";
+    ArrayList<int> third_vec;
+    third_vec.push_back(19);
+    third_vec.push_back(21);
+    third_vec.push_back(32);
+    third_vec.push_back(1);
+    third_vec.push_back(14);
+    third_vec.push_back(26);
+    third_vec.push_back(7);
+    third_vec.push_back(30);
+    ArrayList<int> sorted_vec = selection_sort(third_vec);
+    
+
 
     // binary search tree
     BinarySearchTree bst;

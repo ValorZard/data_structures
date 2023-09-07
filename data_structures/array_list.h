@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+#include <string>
 // equivalent to std::vector
 
 template <typename Data>
@@ -31,6 +32,9 @@ public:
 	int max_size() const; // returns capacity
 
 	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
+
+	// this should be const even though we're creating a string, we are not touching any data
+	std::string to_string() const;
 };
 
 template <typename Data> void ArrayList<Data>::setup()
@@ -115,4 +119,16 @@ template <typename Data>  bool ArrayList<Data>::resize()
 		return true; // return true if we did resize the array
 	}
 	return false; // we didn't resize the array, false
+}
+
+template <typename Data>  std::string ArrayList<Data>::to_string() const
+{
+	std::string list_string = "[";
+
+	for (int i = 0; i < size(); ++i) {
+		list_string += std::to_string(array[i]) + ",";
+	}
+
+	list_string += "]";
+	return list_string;
 }
