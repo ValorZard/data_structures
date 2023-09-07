@@ -4,3 +4,8 @@ struct Node
 	int value;
 	Node* next = nullptr;
 };
+
+struct NodeIterator
+{
+
+};

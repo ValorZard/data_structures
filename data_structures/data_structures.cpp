@@ -6,6 +6,7 @@
 #include "array_list.h"
 #include "binary_tree.h"
 #include "sorting.h"
+#include <algorithm> // for random shuffle
 
 int main()
 {
@@ -99,6 +100,21 @@ int main()
     test_vec.remove_between(40, 60);
     
     std::cout << "Deleted from 40 and up to but not including 60 " << test_vec.to_string() << "\n";
+
+    std::cout << "Check if test_vec has 69: " << std::to_string(test_vec.has(69)) << "\n";
+
+    std::cout << "Check if test_vec has 81: " << std::to_string(test_vec.has(81)) << "\n";
+    
+    test_vec.erase(test_vec.find(81), test_vec.end());
+
+    std::cout << "Since test_vec has 81, erase all values between 81 and the end of the vec " << test_vec.to_string() << "\n";
+
+    std::random_shuffle(test_vec.begin(), test_vec.end());
+
+    std::cout << "We've screwed up this vector enough, lets shuffle it" << test_vec.to_string() << "\n";
+
+    // randomly generate 10 numbers
+
 
     // binary search tree
     BinarySearchTree bst;

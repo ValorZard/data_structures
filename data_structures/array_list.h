@@ -90,6 +90,12 @@ public:
 	const Iterator cbegin() const;
 	const Iterator cend() const;
 
+	// this is just a wrapped for std::find
+	// we don't want to change the data being searched or the array
+	Iterator find(const Data& data) const;
+	// check if the array_list has what we're looking for
+	bool has(const Data& data) const;
+
 	////////////////////////////////////////////////////////////
 	//				CHANGING DATA							///
 	//////////////////////////////////////////////////////////
@@ -137,90 +143,107 @@ public:
 	std::string to_string() const;
 };
 
-template <typename Data> class ArrayList<Data>::Iterator
+// https://stackoverflow.com/questions/12092448/code-for-a-basic-random-access-iterator-based-on-pointers
+template <typename Data> 
+class ArrayList<Data>::Iterator
 {
 public:
 	// members of a struct are auto-public
-	using iterator_category = std::forward_iterator_tag;
+	using iterator_category = std::random_access_iterator_tag; // we're making this a random_access_iterator so we can do a random shuffle
 	using difference_type = std::ptrdiff_t;
 	using value_type = Data;
 	using pointer = Data*;  // or also value_type*
 	using reference = Data&;  // or also value_type&
 
-	Iterator(pointer ptr) : current_ptr(ptr) {};
+	Iterator(Data* _ptr) : ptr(_ptr) {};
 
-	reference operator*() const {
-		return *current_ptr;
+	Iterator(const Iterator& other) : ptr(other.ptr) {};
+
+	inline Iterator& operator+=(difference_type difference) 
+	{ 
+		ptr += difference; 
+		return *this; 
+	}
+	inline Iterator& operator-=(difference_type difference) 
+	{
+		ptr -= difference; 
+		return *this; 
+	}
+
+	// return data when dereferenced
+	inline Data& operator*() const {
+		return *ptr;
 	}
 
 	// make this const so we can use this in const
-	// will not be able to edit the data inside the pointer
-
-	pointer operator->()
+	// will not be able to edit the data inside the ptr
+	inline Data* operator->() const
 	{
-		return current_ptr;
+		return ptr;
 	}
 
-	// make this const so we can use this in const
-	const pointer operator->() const
-	{
-		return current_ptr;
-	}
+	inline Data& operator[](difference_type difference) const { return ptr[difference]; }
 
-	Iterator& operator++()
+	inline Iterator& operator++()
 	{
-		current_ptr++;
+		++ptr;
 		return *this;
 	}
 
-	Iterator operator++(int) {
+	inline Iterator operator++(int) {
 		Iterator temp = *this; ++(*this); return temp;
 	}
 
-	Iterator& operator--()
+	inline Iterator& operator--()
 	{
-		current_ptr--;
+		--ptr;
 		return *this;
 	}
 
-	Iterator operator--(int) {
+	inline Iterator operator--(int) {
 		Iterator temp = *this; ++(*this); return temp;
 	}
+
+	inline difference_type operator-(const Iterator& other) const { return ptr - other.ptr; }
+	inline Iterator operator+(difference_type difference) const { return Iterator(ptr + difference); }
+	inline Iterator operator-(difference_type difference) const { return Iterator(ptr - difference); }
+	friend inline Iterator operator+(difference_type left, const Iterator& right) { return Iterator(left + right.ptr); }
+	friend inline Iterator operator-(difference_type left, const Iterator& right) { return Iterator(left - right.ptr); }
 
 	
 	// also using https://www.learncpp.com/cpp-tutorial/overloading-the-comparison-operators/
-	bool operator== (const Iterator& b) 
+	inline bool operator== (const Iterator& other)
 	{ 
-		return current_ptr == b.current_ptr; 
+		return ptr == other.ptr; 
 	};
 
-	bool operator!= (const Iterator& b)
+	inline bool operator!= (const Iterator& other)
 	{
-		return current_ptr != b.current_ptr;
+		return ptr != other.ptr;
 	};
 
-	bool operator< (const Iterator& b)
+	inline bool operator< (const Iterator& other)
 	{
-		return current_ptr < b.current_ptr;
+		return ptr < other.ptr;
 	};
 
-	bool operator> (const Iterator& b)
+	inline bool operator> (const Iterator& other)
 	{
-		return current_ptr > b.current_ptr;
+		return ptr > other.ptr;
 	};
 
-	bool operator<= (const Iterator& b)
+	inline bool operator<= (const Iterator& other)
 	{
-		return current_ptr <= b.current_ptr;
+		return ptr <= other.ptr;
 	};
 
-	bool operator>= (const Iterator& b)
+	inline bool operator>= (const Iterator& other)
 	{
-		return current_ptr >= b.current_ptr;
+		return ptr >= other.ptr;
 	};
 
 private:
-	pointer current_ptr; // points to an element of ArrayList
+	Data* ptr; // points to an element of ArrayList
 };
 
 template <typename Data> void ArrayList<Data>::setup()
@@ -405,6 +428,7 @@ void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase
 		{
 			continue;
 		}
+		// idk why this generates an errror
 		new_array[index] = *it;
 		++index;
 	}
@@ -491,6 +515,17 @@ typename const ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t ind
 	return Iterator(&array[index]); // get pointer at this specific index
 }
 
+template <typename Data>
+typename ArrayList<Data>::Iterator ArrayList<Data>::find(const Data& data) const
+{
+	return std::find(begin(), end(), data);
+}
+
+template <typename Data>
+typename bool ArrayList<Data>::has(const Data& data) const
+{
+	return find(data) != end();
+}
 
 // this will delete objects after new_length if new_length is smaller than the current size
 template <typename Data>  bool ArrayList<Data>::resize(size_t new_length)
