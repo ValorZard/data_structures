@@ -17,7 +17,7 @@ private:
 	Data* array;
 	size_t length; // the current length of all actual values
 	size_t capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
-	void setup(); // reuse for different constructors
+	void setup(const size_t size = 0); // reuse for different constructors
 public:
 	////////////////////////////////////////////////////////////
 	//					CONSTRUCTORS						///
@@ -249,8 +249,9 @@ private:
 };
 
 template <typename Data> 
-inline void ArrayList<Data>::setup()
+inline void ArrayList<Data>::setup(const size_t size)
 {
+	this->length = size;
 	// capacity : the actual size of the array to make it bigger
 	if (length == 0)
 	{
@@ -268,19 +269,12 @@ template <typename Data>
 
 inline ArrayList<Data>::ArrayList(const size_t size)
 {
-	// i'm just going to throw an error if the size is set to be less than to zero to make shit less weird to deal with
-	if (size < 0)
-	{
-		throw std::runtime_error("size is less than 0, this is currently not supported!");
-	}
-	this->length = size;
-	setup();
+	setup(size);
 }
 
 template <typename Data> 
 inline ArrayList<Data>::ArrayList()
 {
-	this->length = 0;
 	setup();
 }
 
@@ -289,7 +283,6 @@ template<typename Data>
 template<typename OutsideIterator>
 inline ArrayList<Data>::ArrayList(OutsideIterator first, OutsideIterator last)
 {
-	this->length = 0;
 	setup();
 
 	OutsideIterator it = first;
@@ -307,7 +300,6 @@ inline ArrayList<Data>::ArrayList(OutsideIterator first, OutsideIterator last)
 template<typename Data>
 inline ArrayList<Data>::ArrayList(const Data data_array[], const size_t size)
 {
-	this->length = 0; // get length of c style array
 	setup();
 
 	for (size_t i = 0; i < size; ++i)
@@ -319,7 +311,6 @@ inline ArrayList<Data>::ArrayList(const Data data_array[], const size_t size)
 template <typename Data> ArrayList<Data>::ArrayList(const ArrayList& old)
 {
 	// do basic setup before we do anything too crazy
-	this->length = 0;
 	setup();
 	// this should work fine i think, unless we horribly fuck things up
 	// since this will result in something the same size as the other array list with all the data in the right place
@@ -411,23 +402,27 @@ template <typename Data> const bool ArrayList<Data>::is_empty() const
 	return length == 0;
 }
 
-template <typename Data> void ArrayList<Data>::push_back(const Data& new_data)
+template <typename Data> 
+inline void ArrayList<Data>::push_back(const Data& new_data)
 {
 	++length; // increase length since we're adding something at the end
 	resize(length);
 	array[length - 1] = new_data; // add thing on the end of the array
 }
 
-template <typename Data> Data ArrayList<Data>::pop_back()
+template <typename Data> 
+inline Data ArrayList<Data>::pop_back()
 {
 	Data popped_data = array[length - 1]; // copy data, since this wont exist after deleting the array
 	resize(length - 1); // technically unnecessary, as this will delete and create a new array, but for the sake of API consistency, this is fine
 	return popped_data;
 }
 
-template <typename Data> void ArrayList<Data>::erase(const Iterator iter)
+template <typename Data> 
+inline void ArrayList<Data>::erase(const Iterator iter)
 {
-	Data* new_array = new Data[length];
+	// the capacity is still the same
+	Data* new_array = new Data[capacity];
 
 	size_t index = 0;
 	// https://stackoverflow.com/a/14374550
@@ -436,6 +431,8 @@ template <typename Data> void ArrayList<Data>::erase(const Iterator iter)
 		// skip data we're erasing
 		if (it == iter)
 		{
+			// make sure to decrease size by one now that we know we have erased the data
+			--size;
 			continue;
 		}
 		new_array[index] = *it;
@@ -444,17 +441,12 @@ template <typename Data> void ArrayList<Data>::erase(const Iterator iter)
 
 	delete[] array;
 	array = new_array;
-
-	// index is now the length of the new array
-	// this means we can now resize to the length of the new array
-	// this will create another array, which will probably waste memory, but oh well
-	resize(index);
 }
 
 template <typename Data> 
-void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
+inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
 {
-	Data* new_array = new Data[length];
+	Data* new_array = new Data[capacity];
 
 	size_t index = 0;
 	// https://stackoverflow.com/a/14374550
@@ -464,6 +456,8 @@ void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase
 		// erase starting from beginning but stop before last
 		if (it >= begin_erase  && it < end_erase)
 		{
+			// make sure to decrease size by one now that we know we have erased the data
+			--size;
 			continue;
 		}
 		// idk why this generates an errror
@@ -542,13 +536,13 @@ const typename ArrayList<Data>::Iterator ArrayList<Data>::cend() const
 }
 
 template <typename Data>
-typename ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index)
+inline typename ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index)
 {
 	return Iterator(&array[index]); // get pointer at this specific index
 }
 
 template <typename Data>
-typename const ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index) const
+inline typename const ArrayList<Data>::Iterator ArrayList<Data>::iterator_at(size_t index) const
 {
 	return Iterator(&array[index]); // get pointer at this specific index
 }
@@ -566,7 +560,8 @@ typename bool ArrayList<Data>::has(const Data& data) const
 }
 
 // this will delete objects after new_length if new_length is smaller than the current size
-template <typename Data>  bool ArrayList<Data>::resize(size_t new_length)
+template <typename Data>  
+inline bool ArrayList<Data>::resize(size_t new_length)
 {
 	length = new_length;
 	capacity = 2 * length;
@@ -583,7 +578,8 @@ template <typename Data>  bool ArrayList<Data>::resize(size_t new_length)
 	return true; // return true if we did resize the array
 }
 
-template <typename Data> void ArrayList<Data>::clear()
+template <typename Data> 
+inline void ArrayList<Data>::clear()
 {
 	// reset everything
 	this->length = 0;
@@ -591,7 +587,8 @@ template <typename Data> void ArrayList<Data>::clear()
 	setup();
 }
 
-template <typename Data>  std::string ArrayList<Data>::to_string() const
+template <typename Data>  
+inline std::string ArrayList<Data>::to_string() const
 {
 	std::string list_string = "[";
 
