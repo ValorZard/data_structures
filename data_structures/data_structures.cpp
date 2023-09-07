@@ -63,6 +63,7 @@ int main()
     // resize
     sorted_vec.resize(4);
     std::cout << "resized: " << sorted_vec.to_string() << "\n";
+    std::cout << "front: " << sorted_vec.front() << " back: " << sorted_vec.back() << "\n";
 
 
     // binary search tree

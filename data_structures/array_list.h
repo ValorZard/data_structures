@@ -14,6 +14,9 @@ private:
 	int capacity; // the length of the actual array thats storing all these values. Doubles when we hit the limit
 	void setup(); // reuse for different constructors
 public:
+	////////////////////////////////////////////////////////////
+	//					CONSTRUCTORS						///
+	//////////////////////////////////////////////////////////
 	ArrayList(); // default constructor
 	ArrayList(unsigned int length);
 
@@ -36,13 +39,34 @@ public:
 	// for const correctness, we should also have a const version of this function when ArrayList is const
 	// https://isocpp.org/wiki/faq/const-correctness
 	const Data& operator[](unsigned int) const;
+	
+	////////////////////////////////////////////////////////////
+	//				ARRAY MANAGEMENT						///
+	//////////////////////////////////////////////////////////
 
+	// if we want to get the array inside of the array_list
+	Data* get_array();
+	
+	// have a const version too just in case
+	const Data* get_array() const;
+
+	// Get the data at the front of the array
+	Data& front();
+	const Data& front() const;
+
+	// Get the data at the back of the array
+	Data& back();
+	const Data& back() const;
+
+	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
+
+	////////////////////////////////////////////////////////////
+	//				CAPACITY MANAGEMENT						///
+	//////////////////////////////////////////////////////////
 
 	// the following are const because these functions shouldn't change the data inside the vector itself
 	int size() const;
 	int max_size() const; // returns capacity
-
-	void push_back(const Data& new_data); // const and a reference because we don't want to change the data being inserted
 
 	// runs whenever we need to resize the array to have greater capacity;
 	// also just realized we can use this whenever we want to change size of the arraylist
@@ -50,6 +74,10 @@ public:
 
 	// if we want to delete everything and reset it
 	void clear();
+
+	////////////////////////////////////////////////////////////
+	//				NICE TO HAVES							///
+	//////////////////////////////////////////////////////////
 
 	// this should be const even though we're creating a string, we are not touching any data
 	std::string to_string() const;
@@ -130,6 +158,36 @@ template <typename Data> Data& ArrayList<Data>::operator[](unsigned int index)
 template <typename Data> const Data& ArrayList<Data>::operator[](unsigned int index) const
 {
 	return array[index];
+}
+
+template <typename Data> Data* ArrayList<Data>::get_array()
+{
+	return array;
+}
+
+template <typename Data> const Data* ArrayList<Data>::get_array() const
+{
+	return array;
+}
+
+template <typename Data> Data& ArrayList<Data>::front()
+{
+	return array[0];
+}
+
+template <typename Data> const Data& ArrayList<Data>::front() const
+{
+	return array[0];
+}
+
+template <typename Data> Data& ArrayList<Data>::back()
+{
+	return array[length - 1];
+}
+
+template <typename Data> const Data& ArrayList<Data>::back() const
+{
+	return array[length - 1];
 }
 
 template <typename Data> int ArrayList<Data>::size() const
