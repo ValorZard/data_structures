@@ -7,6 +7,7 @@
 #include "binary_tree.h"
 #include "sorting.h"
 #include <algorithm> // for random shuffle
+#include <array>
 
 int main()
 {
@@ -74,6 +75,18 @@ int main()
     std::cout << "resized: " << sorted_vec.to_string() << "\n";
     std::cout << "front: " << sorted_vec.front() << " back: " << sorted_vec.back() << "\n";
 
+    // insertion sort
+    int sorting_ints[] = {10, 9, 7, 14, 11};
+
+    ArrayList<int> insertion_sort_vec(sorting_ints, + sizeof(sorting_ints) / sizeof(int));
+
+    std::cout << "Vector we're going to sort: " << insertion_sort_vec.to_string() << "\n";
+
+    //insertion_sort_vec = insertion_sort(insertion_sort_vec);
+
+    std::cout << "It's sorted! -> " << insertion_sort_vec.to_string() << "\n";
+
+
     // check if for each loop works
     ArrayList<int> test_vec;
     for (int i = 0; i < 100; ++i)
@@ -112,6 +125,10 @@ int main()
     std::random_shuffle(test_vec.begin(), test_vec.end());
 
     std::cout << "We've screwed up this vector enough, lets shuffle it" << test_vec.to_string() << "\n";
+
+    //test_vec = insertion_sort(test_vec);
+
+    std::cout << "And now lets sort it! " << test_vec.to_string() << "\n";
 
     // randomly generate 10 numbers
 

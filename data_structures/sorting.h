@@ -1,6 +1,6 @@
 #pragma once
 #include "array_list.h"
-
+#include <iostream>
 /*
 * Find the smallest card. Swap it with the first card.
 Find the second-smallest card. Swap it with the second card.
@@ -55,24 +55,26 @@ ArrayList<int> insertion_sort(ArrayList<int> array_list) // let's not change the
 	int current_index_being_sorted = 1;
 	while (current_index_being_sorted < array_list.size())
 	{
+		int data_being_sorted = array_list[current_index_being_sorted];
+		
 		// current index we are at in the sorted subarray
-		int sorted_index = 0;
-		// get data at index in sorted subarray
-		int current_data = array_list[sorted_index];
-		for (sorted_index = 0; sorted_index < current_index_being_sorted - 1; ++sorted_index)
+		// (Right now, its the index right before the element we're sorting
+		// ex. 10, 9, 7, 14, 11, with [10, 9, 7, 14] being the sub array, and [11] being the element we're sorting
+		// sorted index here would be 3 since array[3] = 14
+		int sorted_index = current_index_being_sorted - 1;
+
+		// going down the subarray, sort all the data not in order
+		// since we're starting with a subarray of one, it HAS to be sorted properly
+		// and then each time we have something not in order, we can just shuffle it down until it is sorted
+		// ex. 10, 9, 7, 14, 11 -> [10], 9, 8, 14, 11 -> [10, 9] , 8, 14, 11 -> [9, 10] , 8, 14, 11 
+		// and so on
+		while (sorted_index >= 0 && array_list[sorted_index] > data_being_sorted)
 		{
-			current_data = array_list[sorted_index];
-			if (array_list[current_index_being_sorted] < current_data)
-			{
-				// we found a place to put the data, and swap it with the current subarray data which is in the wrong palce
-				break;
-			}
+			array_list[sorted_index - 1] = array_list[sorted_index];
+			--sorted_index;
 		}
 
-		// swap the current data of the array we are indexing
-		int old_data = array_list[current_index_being_sorted];
-		array_list[current_index_being_sorted] = current_data;
-		array_list[sorted_index] = old_data;
+		array_list[sorted_index + 1] = data_being_sorted;
 
 		++current_index_being_sorted;
 	}

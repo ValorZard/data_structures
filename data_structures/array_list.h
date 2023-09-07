@@ -24,6 +24,8 @@ public:
 	//////////////////////////////////////////////////////////
 	ArrayList(); // default constructor
 	ArrayList(size_t length);
+	template <typename OutsideIterator> ArrayList(OutsideIterator first, OutsideIterator last); // iterator constructor
+	ArrayList(const Data data_array[], const size_t size);
 
 	// we need a destructor, a copy constructor, and an assigment operator due to the rule of three
 	// https://en.cppreference.com/w/cpp/language/rule_of_three
@@ -246,7 +248,8 @@ private:
 	Data* ptr; // points to an element of ArrayList
 };
 
-template <typename Data> void ArrayList<Data>::setup()
+template <typename Data> 
+inline void ArrayList<Data>::setup()
 {
 	// capacity : the actual size of the array to make it bigger
 	if (length == 0)
@@ -261,7 +264,9 @@ template <typename Data> void ArrayList<Data>::setup()
 	array = new Data[capacity];
 }
 
-template <typename Data> ArrayList<Data>::ArrayList(const size_t size)
+template <typename Data> 
+
+inline ArrayList<Data>::ArrayList(const size_t size)
 {
 	// i'm just going to throw an error if the size is set to be less than to zero to make shit less weird to deal with
 	if (size < 0)
@@ -272,10 +277,43 @@ template <typename Data> ArrayList<Data>::ArrayList(const size_t size)
 	setup();
 }
 
-template <typename Data> ArrayList<Data>::ArrayList()
+template <typename Data> 
+inline ArrayList<Data>::ArrayList()
 {
 	this->length = 0;
 	setup();
+}
+
+// THIS IS BROKEN I NEED TO FIX IT!!
+template<typename Data>
+template<typename OutsideIterator>
+inline ArrayList<Data>::ArrayList(OutsideIterator first, OutsideIterator last)
+{
+	this->length = 0;
+	setup();
+
+	OutsideIterator it = first;
+
+	//int number_of_elements = std::distance(first, last);
+
+	while (it != last)
+	{
+		std::cout << "aa" << "\n";
+		push_back(*it);
+		++it;
+	}
+}
+
+template<typename Data>
+inline ArrayList<Data>::ArrayList(const Data data_array[], const size_t size)
+{
+	this->length = 0; // get length of c style array
+	setup();
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		push_back(data_array[i]);
+	}
 }
 
 template <typename Data> ArrayList<Data>::ArrayList(const ArrayList& old)
