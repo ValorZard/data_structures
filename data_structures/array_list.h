@@ -61,7 +61,7 @@ template <typename Data> ArrayList<Data>::ArrayList()
 
 template <typename Data> ArrayList<Data>::~ArrayList()
 {
-	delete array;
+	delete[] array;
 }
 
 template <typename Data> Data& ArrayList<Data>::operator[](unsigned int index)

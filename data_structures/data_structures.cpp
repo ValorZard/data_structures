@@ -32,7 +32,7 @@ int main()
 
     // can i set and change shit?
     vector[1] = 2;
-    std::cout << vector[1] << "\n";
+    std::cout << "Vector[1] = " << vector[1] << "\n";
     // IT DOES WORK WOOOO
 
     // test pushback
