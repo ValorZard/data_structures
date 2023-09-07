@@ -418,6 +418,7 @@ inline Data ArrayList<Data>::pop_back()
 	return popped_data;
 }
 
+// this can be optimized better
 template <typename Data> 
 inline void ArrayList<Data>::erase(const Iterator iter)
 {
@@ -443,6 +444,7 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 	array = new_array;
 }
 
+// this can be optimized better
 template <typename Data> 
 inline void ArrayList<Data>::erase(const Iterator begin_erase, const Iterator end_erase)
 {
@@ -559,7 +561,20 @@ typename bool ArrayList<Data>::has(const Data& data) const
 	return find(data) != end();
 }
 
-// this will delete objects after new_length if new_length is smaller than the current size
+/*
+this will delete objects after new_length if new_length is smaller than the current size
+ we should optimize this better
+
+ Resizes the container so that it contains n elements.
+
+If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond(and destroying them).
+
+If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n.If val is specified, the new elements are initialized as copies of val, otherwise, they are value - initialized.
+
+If n is also greater than the current container capacity, an automatic reallocation of the allocated storage space takes place.
+
+Notice that this function changes the actual content of the container by inserting or erasing elements from it.
+*/
 template <typename Data>  
 inline bool ArrayList<Data>::resize(size_t new_length)
 {
