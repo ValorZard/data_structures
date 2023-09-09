@@ -24,20 +24,7 @@ std::string array_list_string(ArrayList<int> array_list)
 int main()
 {
     std::cout << "Hello World!\n";
-    Node* n = new Node;
-    Node* current_node = n;
-    for (int i = 0; i < 100; ++i)
-    {
-        current_node->value = i;
-        current_node->next = new Node;
-        current_node = current_node->next;
-    }
-    std::cout << "print linked list\n";
-    for (int i = 0; i < 100; ++i)
-    {
-        std::cout << n->value << "\n";
-        n = n->next;
-    }
+
     std::cout << "print ArrayList\n";
     ArrayList<int> vector(2);
     std::cout << vector.to_string() << "\n";
