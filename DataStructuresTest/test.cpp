@@ -46,3 +46,14 @@ TEST(LinkedListTestSuite, TestNodes) {
 		current_node = next_node;
 	}
 }
+
+TEST(LinkedListTestSuite, TestLinkedListBasic) {
+	LinkedList list{};
+	list.append(1);
+	list.append(2);
+	list.append(3);
+
+	ASSERT_EQ(list.get_node(0)->value, 1);
+	ASSERT_EQ(list.get_node(1)->value, 2);
+	ASSERT_EQ(list.get_node(2)->value, 3);
+}
