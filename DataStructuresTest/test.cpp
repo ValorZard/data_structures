@@ -71,7 +71,8 @@ TEST(LinkedListTestSuite, TestLinkedListRemove) {
 	list.append(2);
 	list.append(3);
 	
-	//list.remove(1);
+	ASSERT_EQ(list.remove(69), false);
+	ASSERT_EQ(list.remove(1), true);
 	// this should shuffle things around
 	ASSERT_EQ(list.find(1), -1); // should no longer exist
 	ASSERT_EQ(list.get_size(), 2);
