@@ -14,9 +14,13 @@ public:
 	{
 		head = nullptr;
 	}
+
+	// use for destruction
+	void clear();
+
 	~BinarySearchTree()
 	{
-		delete head;
+		clear();
 	}
 
 	void insert(int value);
