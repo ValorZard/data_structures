@@ -68,6 +68,44 @@ void BinarySearchTree::clear()
 	}
 }
 
+int find_helper(Leaf* current_leaf, int value, int level)
+{
+	if (current_leaf == nullptr)
+	{
+		return -1; // didn't find it
+	}
+	else if (current_leaf->value == value)
+	{
+		return level;
+	}
+	else if (current_leaf->value > value)
+	{
+		// switch current leaf to the left leaf and keep going down
+		return find_helper(current_leaf->left, value, level + 1);
+	}
+	else if (current_leaf->value < value)
+	{
+		// switch current leaf to the right leaf and keep going down
+		return find_helper(current_leaf->right, value, level + 1);
+	}
+	return 0;
+}
+
+
+int BinarySearchTree::find(int value)
+{
+	// handle edge case of head being null
+	if (head == nullptr)
+	{
+		return -1;
+	}
+	else
+	{
+		return find_helper(head, value, 1); 
+	}
+}
+
+
 void print_helper(Leaf* current_leaf, int level = 1)
 {
 	if (current_leaf != nullptr)

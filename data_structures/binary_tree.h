@@ -24,5 +24,6 @@ public:
 	}
 
 	void insert(int value);
+	int find(int value); // return level the value is at
 	void print_tree();
 };

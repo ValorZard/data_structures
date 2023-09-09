@@ -2,7 +2,6 @@
 #include <gtest/gtest.h>
 #include "../data_structures/array_list.h"
 #include "../data_structures/linked_list.h"
-#include "../data_structures/array_list.h"
 #include "../data_structures/binary_tree.h"
 #include "../data_structures/sorting.h"
 
@@ -77,4 +76,22 @@ TEST(LinkedListTestSuite, TestLinkedListRemove) {
 	ASSERT_EQ(list.find(1), -1); // should no longer exist
 	ASSERT_EQ(list.get_size(), 2);
 	ASSERT_EQ(list.get_node(1)->value, 3); // the node at index 2 is now at index 1
+}
+
+TEST(BinarySearchTreeTestSuite, TestInsertTree) {
+	BinarySearchTree bst{};
+
+	bst.insert(7);
+	bst.insert(2);
+	bst.insert(6);
+	bst.insert(4);
+	bst.insert(5);
+	bst.insert(3);
+	bst.insert(10);
+	bst.insert(1);
+	bst.insert(8);
+	bst.insert(12);
+
+	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
+	
 }
