@@ -53,7 +53,27 @@ TEST(LinkedListTestSuite, TestLinkedListBasic) {
 	list.append(2);
 	list.append(3);
 
+	// check if appends works
 	ASSERT_EQ(list.get_node(0)->value, 1);
 	ASSERT_EQ(list.get_node(1)->value, 2);
 	ASSERT_EQ(list.get_node(2)->value, 3);
+	
+	// check if find works
+	ASSERT_EQ(list.find(1), 0);
+	ASSERT_EQ(list.find(2), 1);
+	ASSERT_EQ(list.find(3), 2);
+	//ASSERT_EQ(list.find(69), -1);
+}
+
+TEST(LinkedListTestSuite, TestLinkedListRemove) {
+	LinkedList list{};
+	list.append(1);
+	list.append(2);
+	list.append(3);
+	
+	//list.remove(1);
+	// this should shuffle things around
+	ASSERT_EQ(list.find(1), -1); // should no longer exist
+	ASSERT_EQ(list.get_size(), 2);
+	ASSERT_EQ(list.get_node(1)->value, 3); // the node at index 2 is now at index 1
 }
