@@ -1,19 +1,18 @@
 #include "pch.h"
-#include <gtest/gtest.h>
 #include "../data_structures/array_list.h"
 #include "../data_structures/binary_tree.h"
 #include "../data_structures/sorting.h"
 
-#include "test_linked_list.cpp"
-
+/*
 int main(int argc, char** argv)
 {
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
-
+*/
+/*
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
-	/*
+	
 	BinarySearchTree bst{};
 
 	bst.insert(7);
@@ -28,6 +27,6 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 	bst.insert(12);
 
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
-	*/
 	
 }
+*/

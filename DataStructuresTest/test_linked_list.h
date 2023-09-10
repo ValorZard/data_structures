@@ -1,6 +1,5 @@
-#include "../data_structures/linked_list.h"
 #include "pch.h"
-#include <gtest/gtest.h>
+#include "../data_structures/linked_list.h"
 
 //test linked_list working
 TEST(LinkedListTestSuite, TestNodes) {
