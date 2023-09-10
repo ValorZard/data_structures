@@ -1,4 +1,3 @@
-#pragma once
 #include "pch.h"
 #include "../data_structures/binary_tree.h"
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
