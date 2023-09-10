@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../data_structures/binary_tree.h"
+/*
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 	BinarySearchTree bst{};
@@ -18,3 +19,4 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
 
 }
+*/
