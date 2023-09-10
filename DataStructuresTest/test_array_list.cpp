@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../data_structures/array_list.h"
-
+#include <algorithm> // for iterator stuff
+#include <iterator>
 // taken from https://github.com/Miguel-Deniz/Vector-Implementation/blob/master/unittest_Vector/test.cpp
 
 
@@ -66,6 +67,22 @@ TEST(ArrayList, PushBack)
 	ASSERT_EQ(vec.get_capacity(), 14);
 }
 
+TEST(ArrayList, EqualsOperator)
+{
+	ArrayList<int> vec;
+	vec.push_back(10);
+	vec.push_back(9);
+	vec.push_back(8);
+	ArrayList<int> second_vec = vec;
+	ASSERT_EQ(vec, second_vec);
+	second_vec.pop_back(); // delete the lsat element
+	ASSERT_NE(vec, second_vec);
+	second_vec.push_back(7); // add in an element so that they are now the same size
+	ASSERT_NE(vec, second_vec);
+	second_vec.pop_back();
+	second_vec.push_back(8);
+	ASSERT_EQ(vec, second_vec); // they should now be the same again
+}
 
 // Iterators
 TEST(ArrayList, iteratorBegin)
@@ -116,7 +133,25 @@ TEST(ArrayList, iteratorSequence)
 
 }
 
+/*
+TEST(ArrayList, iteratorSorting)
+{
+	// test if the standard library can sort this arraylist
+	ArrayList<int> unsorted_vec;
+	unsorted_vec.push_back(19);
+	unsorted_vec.push_back(21);
+	unsorted_vec.push_back(32);
+	unsorted_vec.push_back(1);
+	unsorted_vec.push_back(14);
+	unsorted_vec.push_back(26);
+	unsorted_vec.push_back(7);
+	unsorted_vec.push_back(30);
 
+	ArrayList<int> sorted_vec = unsorted_vec;
+	std::sort(sorted_vec.begin(), sorted_vec.end());
+
+}
+*/
 
 
 // Capacity

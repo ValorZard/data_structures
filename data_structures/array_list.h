@@ -45,6 +45,12 @@ public:
 	// overloading the [] operator
 	Data& operator[](size_t);
 
+	// overloading the == operator for comparisions
+	bool operator== (const ArrayList& c) const;
+
+	// overloading the != operator for comparisions
+	bool operator!= (const ArrayList& c) const;
+
 	// for const correctness, we should also have a const version of this function when ArrayList is const
 	// https://isocpp.org/wiki/faq/const-correctness
 	const Data& operator[](size_t) const;
@@ -359,6 +365,34 @@ template <typename Data> const Data& ArrayList<Data>::operator[](size_t index) c
 		throw std::out_of_range("data at position does not exist");
 	}
 	return array[index];
+}
+
+template<typename Data>
+inline bool ArrayList<Data>::operator==(const ArrayList<Data>& c) const
+{
+	if (length != c.length)
+	{
+		return false; // if the sizes don't match, they aren't the same
+	}
+	else
+	{
+		// check if all of the elements are the same
+		for (size_t i = 0; i < length; ++i) 
+		{
+			if (at(i) != c.at(i))
+			{
+				return false;
+			}
+		}
+	}
+	// if both the size and all of the elements are the same, then they are the same
+	return true;
+}
+
+template<typename Data>
+inline bool ArrayList<Data>::operator!=(const ArrayList<Data>& c) const
+{
+	return !(*this == c);
 }
 
 template <typename Data> Data* ArrayList<Data>::get_array()

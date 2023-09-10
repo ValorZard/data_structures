@@ -68,7 +68,8 @@ int main()
     // insertion sort
     int sorting_ints[] = {10, 9, 7, 14, 11};
 
-    ArrayList<int> insertion_sort_vec(sorting_ints, + sizeof(sorting_ints) / sizeof(int));
+    // insert list with size
+    ArrayList<int> insertion_sort_vec(sorting_ints, sizeof(sorting_ints) / sizeof(int));
 
     std::cout << "Vector we're going to sort: " << insertion_sort_vec.to_string() << "\n";
 
