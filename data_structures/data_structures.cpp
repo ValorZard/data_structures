@@ -25,15 +25,6 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    std::cout << "print ArrayList\n";
-    ArrayList<int> vector(2);
-    std::cout << vector.to_string() << "\n";
-
-    // can i set and change shit?
-    vector[1] = 2;
-    std::cout << "Vector[1] = " << vector[1] << "\n";
-    // IT DOES WORK WOOOO
-
     // test pushback
     std::cout << "Pushback test (second vec)" << "\n";
     ArrayList<int> second_vec;

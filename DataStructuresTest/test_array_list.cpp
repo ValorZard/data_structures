@@ -33,6 +33,14 @@ TEST(ArrayList, ArrayListCopyCtor)
 	EXPECT_EQ(v.at(4), copy.at(4));
 }
 
+// basic functionality
+TEST(ArrayList, ChangeData)
+{
+	ArrayList<int> vector(2);
+	// can i set and change shit?
+	vector[1] = 2;
+	EXPECT_EQ(vector[1], 2);
+}
 
 
 
