@@ -42,6 +42,29 @@ TEST(ArrayList, ChangeData)
 	EXPECT_EQ(vector[1], 2);
 }
 
+TEST(ArrayList, PushBack)
+{
+	ArrayList<int> vec;
+	// capacity is 1
+	vec.push_back(12);
+	// capacity is now 2
+	vec.push_back(123);
+	// capacity double when we push back here because we reached the limit
+	// 2 -> 3 (since we added an element) -> reserve() gets called and sets the capacity to double (6)
+	vec.push_back(124);
+	vec.push_back(125);
+	vec.push_back(126);
+	ASSERT_EQ(vec.size(), 5);
+	ASSERT_EQ(vec.get_capacity(), 6);
+	vec.push_back(25);
+	// capacity double when we push back here because we reached the limit
+	// 6 -> 7 (since we added an element) -> reserve() gets called and sets the capacity to double (14)
+	vec.push_back(16);
+	vec.push_back(55);
+	vec.push_back(62);
+	ASSERT_EQ(vec.size(), 9);
+	ASSERT_EQ(vec.get_capacity(), 14);
+}
 
 
 // Iterators
