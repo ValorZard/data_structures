@@ -7,23 +7,27 @@ struct Leaf {
 };
 
 class BinarySearchTree {
+
 public:
+// variables
 	Leaf* head;
+// functions
+	void insert(int value);
+	int find(int value); // return level the value is at
+	// use for destruction
+	void destroy_tree(Leaf* current_leaf);
+	void destroy_tree();
+	void print_tree();
+
+// constructors
 
 	BinarySearchTree()
 	{
 		head = nullptr;
 	}
 
-	// use for destruction
-	void clear();
-
 	~BinarySearchTree()
 	{
-		clear();
+		destroy_tree();
 	}
-
-	void insert(int value);
-	int find(int value); // return level the value is at
-	void print_tree();
 };

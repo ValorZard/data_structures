@@ -47,24 +47,24 @@ void BinarySearchTree::insert(int value)
 }
 
 
-void delete_leaf_and_children(Leaf* current_leaf)
+void BinarySearchTree::destroy_tree(Leaf* current_leaf)
 {
 	if (current_leaf == nullptr)
 	{
 		return;
 	}
-	delete_leaf_and_children(current_leaf->left);
-	delete_leaf_and_children(current_leaf->right);
+	destroy_tree(current_leaf->left);
+	destroy_tree(current_leaf->right);
 	delete current_leaf;
 }
 
 
-void BinarySearchTree::clear()
+void BinarySearchTree::destroy_tree()
 {
 	// handle edge case of head being null
 	if (head != nullptr)
 	{
-		delete_leaf_and_children(head);
+		destroy_tree(head);
 	}
 }
 

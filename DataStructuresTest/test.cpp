@@ -22,7 +22,6 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 }
 
-
 int main(int argc, char** argv)
 {
 	testing::InitGoogleTest(&argc, argv);
