@@ -156,6 +156,35 @@ int main()
     empty_vec.insert(empty_vec.begin(), insertion_vec.begin(), insertion_vec.end());
     std::cout << "Now not so empty! " << empty_vec.to_string() << "\n";
 
+    // test test cases from unit test for debugging
+    ArrayList<int> v;
+
+    v.push_back(4);
+    std::cout << "The following should be true: 4 should be equal to " << *v.begin() << " " << (4 == *v.begin()) << "\n";
+
+    v.push_back(9);
+    std::cout << "The following should be true: 4 should be equal to " << *v.begin() << " " << (4 == *v.begin()) << "\n";
+
+    v[0] = -1;
+    ArrayList<int>::Iterator itr = v.begin();
+    std::cout << "The following should be true: -1 should be equal to " << *itr << " " << (-1 == *itr) << "\n";
+
+    ++itr;
+    std::cout << "The following should be true: 9 should be equal to " << *itr << " " << (9 == *itr) << "\n";
+
+    v.push_back(5);
+
+    std::cout << "The following should be true: 9 should be equal to " << *itr << " " << (9 == *itr) << "\n";
+    ++itr;
+    std::cout << "The following should be true: 5 should be equal to " << *itr << " " << (5 == *itr) << "\n";
+
+
+    // Constant ArrayList
+    const ArrayList<int> cv = v;
+
+    ArrayList<int>::Iterator constItr = cv.begin();
+    std::cout << "The following should be true: -1 should be equal to " << *constItr << " " << (-1 == *constItr) << "\n";
+
     // binary search tree
     BinarySearchTree bst;
     bst.insert(7);

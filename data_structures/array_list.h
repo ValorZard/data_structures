@@ -433,15 +433,17 @@ template <typename Data>
 inline void ArrayList<Data>::push_back(const Data& new_data)
 {
 	++length; // increase length since we're adding something at the end
-	resize(length);
+	reserve(length);
 	array[length - 1] = new_data; // add thing on the end of the array
 }
 
+// this won't change the capacity, only the size.
+// if you start out with a lot of elements, and then pop all of them, the array will still be huge, but nothing will be inside
 template <typename Data> 
 inline Data ArrayList<Data>::pop_back()
 {
 	Data popped_data = array[length - 1]; // copy data, since this wont exist after deleting the array
-	resize(length - 1); // technically unnecessary, as this will delete and create a new array, but for the sake of API consistency, this is fine
+	--length; // decrease length by 1
 	return popped_data;
 }
 
@@ -554,8 +556,8 @@ inline void ArrayList<Data>::insert(Iterator position, Data value)
 		throw std::out_of_range("we can't insert that at a position which doesn't exist");
 	}
 
-	// the length is now increased by one, so we should resize
-	resize(length + 1);
+	// the length is now increased by one, so we should check if we need to add more capacity
+	reserve(length + 1);
 
 	// this is like a reverse insertion sort
 
@@ -744,6 +746,26 @@ typename bool ArrayList<Data>::has(const Data& data) const
 	return find(data) != end();
 }
 
+// changes capacity, which is opposed to resize, which changes size/length
+template <typename Data>
+inline void ArrayList<Data>::reserve(size_t new_capacity)
+{
+	if (new_capacity > capacity)
+	{
+		capacity = 2 * new_capacity; // double capacity just in case
+
+		Data* new_array = new Data[capacity];
+		// copy stuff from old array to new array
+		for (size_t i = 0; i < length; ++i)
+		{
+			new_array[i] = array[i];
+		}
+		// delete old array and set it to new array
+		delete[] array;
+		array = new_array;
+	}
+}
+
 /*
 this will delete objects after new_length if new_length is smaller than the current size
  we should optimize this better
@@ -760,56 +782,19 @@ If n is also greater than the current container capacity, an automatic reallocat
 
 Notice that this function changes the actual content of the container by inserting or erasing elements from it.
 */
-template <typename Data>  
+template <typename Data>
 inline bool ArrayList<Data>::resize(size_t new_length, Data value)
 {
 	length = new_length;
-	if (length > capacity)
+	reserve(new_length);
+	// fill up all the empty slots in the array with value
+	for (size_t i = new_length; i < capacity; ++i)
 	{
-		capacity = 2 * length;
-
-		Data* new_array = new Data[capacity];
-		// copy stuff from old array to new array
-		for (size_t i = 0; i < length; ++i)
-		{
-			new_array[i] = array[i];
-		}
-		// delete old array and set it to new array
-		delete array;
-		array = new_array;
-		return true; // return true if we did change the array's capacity
+		array[i] = value;
 	}
-	else
-	{
-		// fill up all the empty slots in the array with value
-		for (size_t i = new_length; i < capacity; ++i)
-		{
-			array[i] = value;
-		}
-	}
+	return true;
 
 }
-
-template <typename Data>
-inline void ArrayList<Data>::reserve(size_t new_capacity)
-{
-	if (new_capacity > capacity)
-	{
-		capacity = 2 * new_capacity; // double capacity just in case
-
-		Data* new_array = new Data[capacity];
-		// copy stuff from old array to new array
-		for (size_t i = 0; i < length; ++i)
-		{
-			new_array[i] = array[i];
-		}
-		// delete old array and set it to new array
-		delete array;
-		array = new_array;
-		return true; // return true if we did change the array's capacity
-	}
-}
-
 
 template <typename Data> 
 inline void ArrayList<Data>::clear()
