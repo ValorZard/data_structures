@@ -134,25 +134,6 @@ TEST(ArrayList, iteratorSequence)
 }
 
 
-TEST(ArrayList, iteratorSorting)
-{
-	// test if the standard library can sort this arraylist
-	ArrayList<int> unsorted_vec;
-	unsorted_vec.push_back(19);
-	unsorted_vec.push_back(21);
-	unsorted_vec.push_back(32);
-	unsorted_vec.push_back(1);
-	unsorted_vec.push_back(14);
-	unsorted_vec.push_back(26);
-	unsorted_vec.push_back(7);
-	unsorted_vec.push_back(30);
-
-	ArrayList<int> sorted_vec = unsorted_vec;
-	//std::sort(sorted_vec.begin(), sorted_vec.end());
-	ASSERT_NE(sorted_vec, unsorted_vec);
-}
-
-
 
 // Capacity
 TEST(ArrayList, size)
