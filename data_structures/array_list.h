@@ -46,10 +46,15 @@ public:
 	Data& operator[](size_t);
 
 	// overloading the == operator for comparisions
-	bool operator== (const ArrayList& c) const;
+	bool operator== (const ArrayList& c);
 
 	// overloading the != operator for comparisions
-	bool operator!= (const ArrayList& c) const;
+	bool operator!= (const ArrayList& c);
+	
+	// consts versions of the top two
+	const bool operator== (const ArrayList& c) const;
+
+	const bool operator!= (const ArrayList& c) const;
 
 	// for const correctness, we should also have a const version of this function when ArrayList is const
 	// https://isocpp.org/wiki/faq/const-correctness
@@ -368,7 +373,35 @@ template <typename Data> const Data& ArrayList<Data>::operator[](size_t index) c
 }
 
 template<typename Data>
-inline bool ArrayList<Data>::operator==(const ArrayList<Data>& c) const
+inline bool ArrayList<Data>::operator==(const ArrayList<Data>& c)
+{
+	if (length != c.length)
+	{
+		return false; // if the sizes don't match, they aren't the same
+	}
+	else
+	{
+		// check if all of the elements are the same
+		for (size_t i = 0; i < length; ++i)
+		{
+			if (at(i) != c.at(i))
+			{
+				return false;
+			}
+		}
+	}
+	// if both the size and all of the elements are the same, then they are the same
+	return true;
+}
+
+template<typename Data>
+inline bool ArrayList<Data>::operator!=(const ArrayList<Data>& c)
+{
+	return !(*this == c);
+}
+
+template<typename Data>
+inline const bool ArrayList<Data>::operator==(const ArrayList<Data>& c) const
 {
 	if (length != c.length)
 	{
@@ -390,7 +423,7 @@ inline bool ArrayList<Data>::operator==(const ArrayList<Data>& c) const
 }
 
 template<typename Data>
-inline bool ArrayList<Data>::operator!=(const ArrayList<Data>& c) const
+inline const bool ArrayList<Data>::operator!=(const ArrayList<Data>& c) const
 {
 	return !(*this == c);
 }

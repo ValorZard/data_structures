@@ -133,7 +133,7 @@ TEST(ArrayList, iteratorSequence)
 
 }
 
-/*
+
 TEST(ArrayList, iteratorSorting)
 {
 	// test if the standard library can sort this arraylist
@@ -148,10 +148,10 @@ TEST(ArrayList, iteratorSorting)
 	unsorted_vec.push_back(30);
 
 	ArrayList<int> sorted_vec = unsorted_vec;
-	std::sort(sorted_vec.begin(), sorted_vec.end());
-
+	//std::sort(sorted_vec.begin(), sorted_vec.end());
+	ASSERT_NE(sorted_vec, unsorted_vec);
 }
-*/
+
 
 
 // Capacity
