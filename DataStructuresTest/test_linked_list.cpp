@@ -1,3 +1,4 @@
+#pragma once
 #include "pch.h"
 #include "../data_structures/linked_list.h"
 
