@@ -140,39 +140,47 @@ public:
 		return size;
 	}
 
-	bool remove(int value)
+	bool remove_at(int index_to_remove)
 	{
-		// delete elements in linked list
-		Node* current_node = head;
-		Node* previous_node = head;
-
-		if (current_node == nullptr)
+		// return false if the index doesn't even exist
+		if (index_to_remove >= size || index_to_remove < 0)
 		{
 			return false;
 		}
 
-		// checking to see if we're either at the end or if we've found it yet
-		while (current_node->next != nullptr && current_node->value != value)
+		// head is null, which mean nothing exists in the list
+		if (head == nullptr)
+		{
+			return false;
+		}
+
+		// delete elements in linked list
+		Node* current_node = head;
+		Node* previous_node = nullptr;
+
+		// if index_to_remove is zero, we're just removing the head, which is easy
+		if (index_to_remove == 0)
+		{
+			head = head->next;
+			delete current_node;
+			return true;
+		}
+
+		int index = 0;
+		// checking to see if we've found it yet
+		while (index < index_to_remove)
 		{
 			previous_node = current_node;
 			current_node = current_node->next;
+			++index;
 		}
 
-		if (current_node->value == value)
-		{
-			// remove and delete node from chain
-			previous_node->next = current_node->next;
-			delete current_node;
-			// decrease size by 1
-			--size;
-			return true;
-		}
-		// we reached the end and couldn't find anything
-		else if (current_node->next == nullptr)
-		{
-			// fail to remove
-			return false;
-		}
+		previous_node->next = current_node->next;
+		delete current_node;
+		// decrease size by one
+		--size;
+		// we did it!
+		return true;
 	}
 
 	// returns -1 if not found

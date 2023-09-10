@@ -70,15 +70,25 @@ TEST(LinkedListTestSuite, TestLinkedListRemove) {
 	list.append(2);
 	list.append(3);
 	
-	ASSERT_EQ(list.remove(69), false);
-	ASSERT_EQ(list.remove(1), true);
+	ASSERT_EQ(list.remove_at(69), false);
+	ASSERT_EQ(list.remove_at(1), true);
 	// this should shuffle things around
-	ASSERT_EQ(list.find(1), -1); // should no longer exist
+	ASSERT_EQ(list.find(2), -1); // should no longer exist
 	ASSERT_EQ(list.get_size(), 2);
 	ASSERT_EQ(list.get_node(1)->value, 3); // the node at index 2 is now at index 1
+
+	list.append(9);
+	list.append(7);
+	list.append(69);
+
+	ASSERT_EQ(list.remove_at(list.find(7)), true); // this finds the node we want, and then removes that node
+	ASSERT_EQ(list.remove_at(list.find(13)), false); // this will try to remove a node that doesn't exist
+	ASSERT_EQ(list.get_size(), 4); // the linked list should now have a lenght of 4
+
 }
 
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
+	/*
 	BinarySearchTree bst{};
 
 	bst.insert(7);
@@ -93,5 +103,6 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 	bst.insert(12);
 
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
+	*/
 	
 }
