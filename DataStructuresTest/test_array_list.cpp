@@ -56,10 +56,17 @@ TEST(ArrayList, iteratorBegin)
 
 	v.push_back(5);
 
+	// the following two can't work because the vector got resized, meaning the old iterator is no longer valid
+	EXPECT_NE(9, *itr);
+	++itr;
+	EXPECT_NE(5, *itr);
+
+	// if we make a new iterator, it should now work
+	itr = v.begin();
+	++itr;
 	EXPECT_EQ(9, *itr);
 	++itr;
 	EXPECT_EQ(5, *itr);
-
 
 	// Constant ArrayList
 	const ArrayList<int> cv = v;
