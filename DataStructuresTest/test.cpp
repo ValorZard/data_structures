@@ -2,6 +2,7 @@
 #include "../data_structures/array_list.h"
 #include "../data_structures/sorting.h"
 #include "../data_structures/binary_tree.h"
+#include "../data_structures/binary_tree.cpp"
 
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
@@ -21,7 +22,6 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
 
 }
-
 int main(int argc, char** argv)
 {
 	testing::InitGoogleTest(&argc, argv);

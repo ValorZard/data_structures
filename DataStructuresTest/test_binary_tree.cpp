@@ -1,6 +1,8 @@
 #include "pch.h"
-#include "../data_structures/binary_tree.h"
 /*
+#include "../data_structures/binary_tree.h"
+#include "../data_structures/binary_tree.cpp"
+
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 	BinarySearchTree bst{};
