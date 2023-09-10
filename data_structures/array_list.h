@@ -59,6 +59,10 @@ public:
 	// have a const version too just in case
 	const Data* get_array() const;
 
+	// have an at(). This is essentially the same thing as using the [] operator
+	Data& at(size_t index);
+	const Data& at(size_t index) const;
+
 	// Get the data at the front of the array
 	Data& front();
 	const Data& front() const;
@@ -341,11 +345,19 @@ template <typename Data> ArrayList<Data>::~ArrayList()
 
 template <typename Data> Data& ArrayList<Data>::operator[](size_t index)
 {
+	if (index >= length)
+	{
+		throw std::out_of_range("data at position does not exist");
+	}
 	return array[index];
 }
 
 template <typename Data> const Data& ArrayList<Data>::operator[](size_t index) const
 {
+	if (index >= length)
+	{
+		throw std::out_of_range("data at position does not exist");
+	}
 	return array[index];
 }
 
@@ -357,6 +369,24 @@ template <typename Data> Data* ArrayList<Data>::get_array()
 template <typename Data> const Data* ArrayList<Data>::get_array() const
 {
 	return array;
+}
+
+template <typename Data> Data& ArrayList<Data>::at(size_t index)
+{
+	if (index >= length)
+	{
+		throw std::out_of_range("data at position does not exist");
+	}
+	return array[index];
+}
+
+template <typename Data> const Data& ArrayList<Data>::at(size_t index) const
+{
+	if (index >= length)
+	{
+		throw std::out_of_range("data at position does not exist");
+	}
+	return array[index];
 }
 
 template <typename Data> Data& ArrayList<Data>::front()
@@ -521,7 +551,7 @@ inline void ArrayList<Data>::insert(Iterator position, Data value)
 	{
 		// we can't insert that doesn't exist
 		// inserting at length is fine because thats just equivalent to push_back()
-		throw std::length_error("we can't insert that at a position which doesn't exist");
+		throw std::out_of_range("we can't insert that at a position which doesn't exist");
 	}
 
 	// the length is now increased by one, so we should resize
@@ -551,7 +581,7 @@ inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value
 	{
 		// we can't insert that doesn't exist
 		// inserting at length is fine because thats just equivalent to push_back()
-		throw std::length_error("we can't insert that at a position which doesn't exist");
+		throw std::out_of_range("we can't insert that at a position which doesn't exist");
 	}
 
 	// the length is now increased by amount, so we should resize

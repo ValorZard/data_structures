@@ -21,9 +21,6 @@
     <ClCompile Include="binary_tree.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="array_list.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="binary_tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
