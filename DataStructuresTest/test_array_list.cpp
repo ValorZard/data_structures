@@ -136,6 +136,18 @@ TEST(ArrayList, FindAndHas)
 	ASSERT_EQ(vec.find(39), vec.end()); // get the iterator for the data
 }
 
+TEST(ArrayList, Clear)
+{
+	ArrayList<int> vec;
+	for (int i = 0; i < 100; ++i)
+	{
+		vec.push_back(i);
+	}
+	vec.clear();
+	ASSERT_EQ(vec.size(), 0);
+	ASSERT_EQ(vec, ArrayList<int>()); // check if vec is the same as a newly initalized ArrayList
+}
+
 TEST(ArrayList, EraseData)
 {
 	ArrayList<int> vec;
