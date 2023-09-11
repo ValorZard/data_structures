@@ -104,7 +104,7 @@ int main()
     std::cout << "Deleted index 22 " << test_vec.to_string() << "\n";
     std::cout << "Test Erase! Size: " << test_vec.size() << "\n";
 
-    test_vec.remove_between(40, 60);
+    test_vec.remove_range(40, 60);
     
     std::cout << "Deleted from 40 and up to but not including 60 " << test_vec.to_string() << "\n"; // deleted (60 - 40) elements
     std::cout << "Test Erase! Size: " << test_vec.size() << "\n";

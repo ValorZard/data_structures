@@ -132,7 +132,7 @@ public:
 	// does same thing as erase
 	void remove_at(size_t index);
 	// does the same thing as erase
-	void remove_between(size_t start, size_t end);
+	void remove_range(size_t start, size_t end);
 
 	// pop element at specific position
 	Data pop_at(size_t index);
@@ -618,7 +618,7 @@ template <typename Data> void ArrayList<Data>::remove_at(size_t index)
 	erase(iterator_at(index));
 }
 
-template <typename Data> void ArrayList<Data>::remove_between(size_t start, size_t end)
+template <typename Data> void ArrayList<Data>::remove_range(size_t start, size_t end)
 {
 	erase(iterator_at(start), iterator_at(end));
 }

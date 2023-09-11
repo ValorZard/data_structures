@@ -194,6 +194,49 @@ TEST(ArrayList, EraseRange)
 	}
 }
 
+TEST(ArrayList, RemoveAt)
+{
+	ArrayList<int> vec;
+	vec.push_back(22);
+	vec.push_back(64);
+	vec.push_back(96);
+
+	// check to see if 64 is in there, which it should be
+	size_t index = vec.find(64) - vec.begin();
+	ASSERT_EQ(index, 1);
+
+	// Erase 64
+	vec.remove_at(index);
+	// check to see if 64 doesn't exist anymore and if the array is the same size with all of its elements
+	ASSERT_EQ(vec.find(64), vec.end());
+	ASSERT_EQ(vec.size(), 2);
+	ASSERT_EQ(vec[0], 22);
+	ASSERT_EQ(vec[1], 96);
+}
+
+TEST(ArrayList, RemoveRange)
+{
+	ArrayList<int> vec;
+	for (int i = 0; i < 100; ++i)
+	{
+		vec.push_back(i);
+	}
+	ASSERT_EQ(vec.size(), 100);
+	// remove all numbers between 39 and up to but not including 42
+	// since this is remove_range, we're removing the items at vec[39], vec[40], and vec[41]
+	vec.remove_range(39, 42);
+	// check to see if it worked
+	ASSERT_EQ(vec.size(), 97); // we removed 3 elements (39, 40, 41) so size should be 97
+	// check if the elements we removed actually got removed
+	for (int i = 0; i < 100; ++i)
+	{
+		if (i < 42 && i >= 39)
+		{
+			ASSERT_EQ(vec.find(i), vec.end()); // we shouldn't be able to find these numbers in the array
+		}
+	}
+}
+
 TEST(ArrayList, EqualsOperator)
 {
 	ArrayList<int> vec;
