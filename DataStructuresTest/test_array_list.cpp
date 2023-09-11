@@ -259,6 +259,23 @@ TEST(ArrayList, PopAt)
 	ASSERT_EQ(vec[1], 96);
 }
 
+TEST(ArrayList, PopBack)
+{
+	ArrayList<int> vec;
+	vec.push_back(22);
+	vec.push_back(64);
+	vec.push_back(96);
+
+	// Pop back the last element
+	int data = vec.pop_back();
+	// check if the data we popped is equal to 96
+	ASSERT_EQ(data, 96);
+	// check to see if 64 doesn't exist anymore in the array_list and if the array is the same size with all of its elements
+	ASSERT_EQ(vec.find(96), vec.end());
+	ASSERT_EQ(vec.size(), 2);
+	ASSERT_EQ(vec[0], 22);
+	ASSERT_EQ(vec[1], 64);
+}
 TEST(ArrayList, EqualsOperator)
 {
 	ArrayList<int> vec;
