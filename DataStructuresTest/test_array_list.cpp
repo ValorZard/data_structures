@@ -120,6 +120,22 @@ TEST(ArrayList, PushBack)
 	ASSERT_EQ(vec.get_capacity(), 14);
 }
 
+TEST(ArrayList, FindAndHas)
+{
+	ArrayList<int> vec;
+	vec.push_back(22);
+	vec.push_back(64);
+	vec.push_back(96);
+
+	// this should be in there
+	ASSERT_EQ(vec.has(64), true); // check if it has the data
+	ASSERT_NE(vec.find(64), vec.end()); // get the iterator for the data
+
+	// this should NOT be in there
+	ASSERT_EQ(vec.has(39), false); // check if it has the data
+	ASSERT_EQ(vec.find(39), vec.end()); // get the iterator for the data
+}
+
 TEST(ArrayList, EraseData)
 {
 	ArrayList<int> vec;
