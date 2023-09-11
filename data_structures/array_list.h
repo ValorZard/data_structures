@@ -738,23 +738,24 @@ inline void ArrayList<Data>::insert(Iterator position, Iterator first, Iterator 
 
 	size_t index = 0;
 
-	for (auto iter = begin(); iter != position; ++iter)
+	while(index < index_of_inserted_value)
 	{
-		new_array[index] = *iter;
+		new_array[index] = array[index];
 		++index;
 	}
 
 	// fill up the amount indexs with value
 	for (auto iter = first; iter != last; ++iter)
 	{
-		new_array[index] = *iter;
+		new_array[index] = *iter; 
 		++index;
 	}
 
 	// keep iterating through the new array while remembering the offset
-	for (auto iter = position; iter != end(); ++iter)
+	while (index < length)
 	{
-		new_array[index] = *iter;
+		new_array[index] = array[index - amount];
+		++index;
 	}
 
 	

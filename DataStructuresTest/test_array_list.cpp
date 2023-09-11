@@ -388,7 +388,36 @@ TEST(ArrayList, insert)
 
 TEST(ArrayList, insertIter)
 {
+	//std::array<int, 5> full_array = { 1, 2, 3, 4, 5 };
+	ArrayList<int> full_array;
+	full_array.push_back(1);
+	full_array.push_back(2);
+	full_array.push_back(3);
+	full_array.push_back(4);
+	full_array.push_back(5);
+	// we're going to combine these two array's using insertion
+	//std::array<int, 3> array1 = { 1, 4, 5 };
+	ArrayList<int> array1;
+	array1.push_back(1);
+	array1.push_back(4);
+	array1.push_back(5);
+	//std::array<int, 2> array2 = { 2, 3};
+	ArrayList<int> array2;
+	array2.push_back(2);
+	array2.push_back(3);
 
+	// convert array 1 into an ArrayList
+	ArrayList<int> insertion_vec(array1.begin(), array1.end());
+	// insert array2 into the vec
+	insertion_vec.insert(insertion_vec.begin() + 1, array2.begin(), array2.end());
+	// the size of the insertion vec should be the same as the full array
+	ASSERT_EQ(full_array.size(), insertion_vec.size());
+	// make sure each element full_array and insertion_vec is equal
+	ASSERT_EQ(full_array[0], insertion_vec[0]);
+	ASSERT_EQ(full_array[1], insertion_vec[1]);
+	ASSERT_EQ(full_array[2], insertion_vec[2]);
+	ASSERT_EQ(full_array[3], insertion_vec[3]);
+	ASSERT_EQ(full_array[4], insertion_vec[4]);
 }
 
 // Capacity
