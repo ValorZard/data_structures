@@ -644,18 +644,12 @@ inline void ArrayList<Data>::insert(Iterator position, Data value)
 	// the length is now increased by one, so we should check if we need to add more capacity
 	++length;
 	reserve(length);
-
-	// this is like a reverse insertion sort
-
-	// shuffle everything up by one
-	Data old_value = array[index_of_inserted_value];
 	
 	// shuffle up by 1 and replace each old value with new value
 	// ex. 10 9 8 7 -> 1 10 9 8 7
-	for (size_t shuffle_index = index_of_inserted_value + 1; shuffle_index < length; ++shuffle_index)
+	for (size_t shuffle_index = length; shuffle_index > index_of_inserted_value; --shuffle_index)
 	{
-		array[shuffle_index] = old_value; // set the current index to the old data before this one (shuffle_index - 1);
-		old_value = array[shuffle_index + 1]; // now this shuffle index is old value
+		array[shuffle_index] = array[shuffle_index - 1]; // set the current index to the old data before this one (shuffle_index - 1);
 	}
 	// now set our now emptied slot to our value
 	array[index_of_inserted_value] = value;

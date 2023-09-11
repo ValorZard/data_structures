@@ -364,8 +364,10 @@ TEST(ArrayList, insert)
 	}
 	EXPECT_EQ(insertion_vec.size(), 10);
 	// insert 69, and check if we actually inserted it
-	insertion_vec.insert(insertion_vec.begin(), 69);
-	ASSERT_NE(insertion_vec.find(69), insertion_vec.end());
+	insertion_vec.insert(insertion_vec.begin() + 1, 69);
+	// we inserted it at index 1
+	int index = insertion_vec.find(69) - insertion_vec.begin();
+	ASSERT_EQ(index, 1);
 	// size increase by 1
 	EXPECT_EQ(insertion_vec.size(), 11);
 	// We're inserting 42 into this 4 times
@@ -384,6 +386,10 @@ TEST(ArrayList, insert)
 	ASSERT_EQ(amount_added, amount_counted);
 }
 
+TEST(ArrayList, insertIter)
+{
+
+}
 
 // Capacity
 TEST(ArrayList, size)
