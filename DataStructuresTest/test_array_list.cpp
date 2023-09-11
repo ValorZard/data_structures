@@ -143,8 +143,9 @@ TEST(ArrayList, Clear)
 	{
 		vec.push_back(i);
 	}
+	ASSERT_EQ(vec.is_empty(), false);
 	vec.clear();
-	ASSERT_EQ(vec.size(), 0);
+	ASSERT_EQ(vec.is_empty(), true);
 	ASSERT_EQ(vec, ArrayList<int>()); // check if vec is the same as a newly initalized ArrayList
 }
 
