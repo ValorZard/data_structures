@@ -26,7 +26,7 @@ public:
 	//////////////////////////////////////////////////////////
 	ArrayList(); // default constructor
 	ArrayList(size_t length);
-	//template <class InputIterator> ArrayList(InputIterator first, InputIterator last); // iterator constructor
+	template <class InputIterator> ArrayList(InputIterator first, InputIterator last); // iterator constructor
 	ArrayList(const Data data_array[], const size_t size);
 
 	// we need a destructor, a copy constructor, and an assigment operator due to the rule of three
@@ -303,16 +303,17 @@ inline ArrayList<Data>::ArrayList()
 	setup();
 }
 
-/* THIS IS BROKEN I NEED TO FIX IT!!
-template<typename Data, class InputIterator>
+template<typename Data>
+template<class InputIterator>
 inline ArrayList<Data>::ArrayList(InputIterator first, InputIterator last)
 {
-	setup(last-first);
-
-	std::copy(first, last, array);
-
+	setup();
+	// get data of everything in the iters and put them into the arraylist
+	for (auto iter = first; iter != last; ++iter)
+	{
+		push_back(*iter);
+	}
 }
-*/
 
 
 template<typename Data>

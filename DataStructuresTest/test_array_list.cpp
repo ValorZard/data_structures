@@ -2,6 +2,7 @@
 #include "../data_structures/array_list.h"
 #include <algorithm> // for iterator stuff
 #include <iterator>
+#include <array>
 // taken from https://github.com/Miguel-Deniz/Vector-Implementation/blob/master/unittest_Vector/test.cpp
 
 
@@ -69,6 +70,20 @@ TEST(ArrayList, GenerateFromArray)
 	for (size_t i = 0; i < array_size; ++i)
 	{
 		ASSERT_EQ(array_of_ints[i], vec[i]);
+	}
+}
+
+TEST(ArrayList, GenerateFromIter)
+{
+	// create array of size 9
+	std::array<int, 9> array = {4, 7, 9, 12, 43, 32, 17, -1, 0};
+	ArrayList<int> array_list( array.begin(), array.end() );
+	// test if the array and the array_list generated from its iterator are the same
+	int i = 0;
+	for (int numb : array_list)
+	{
+		ASSERT_EQ(numb, array[i]);
+		++i;
 	}
 }
 
