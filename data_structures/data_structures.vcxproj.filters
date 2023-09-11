@@ -35,7 +35,7 @@
     <ClInclude Include="depth_first_search.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="breadth_first_seach.h">
+    <ClInclude Include="breadth_first_search.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="array_list.h">

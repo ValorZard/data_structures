@@ -34,6 +34,19 @@ TEST(ArrayList, ArrayListCopyCtor)
 	EXPECT_EQ(v.at(4), copy.at(4));
 }
 
+TEST(ArrayList, GenerateFromArray)
+{
+	int array_of_ints[] = { 10, 9, 7, 14, 11 };
+	size_t array_size = sizeof(array_of_ints) / sizeof(int);
+	ArrayList<int> vec{ array_of_ints, array_size };
+
+	// test if the vec and the array_of_ints generate the same
+	for (size_t i = 0; i < array_size; ++i)
+	{
+		ASSERT_EQ(array_of_ints[i], vec[i]);
+	}
+}
+
 // basic functionality
 TEST(ArrayList, ChangeData)
 {
