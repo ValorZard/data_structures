@@ -435,6 +435,30 @@ TEST(ArrayList, size)
 	EXPECT_EQ(2, v.size());
 }
 
+TEST(ArrayList, resize)
+{
+	ArrayList<int> vec;
+	vec.push_back(10);
+	vec.push_back(9);
+	vec.push_back(8);
+	vec.push_back(42);
+	vec.push_back(64);
+
+	ASSERT_EQ(vec.size(), 5);
+
+	vec.resize(3);
+	
+	// Check size has changed
+	ASSERT_EQ(vec.size(), 3);
+	// Check all the elements are in the right places
+	ASSERT_EQ(vec[0], 10); 
+	ASSERT_EQ(vec[1], 9);
+	ASSERT_EQ(vec[2], 8);
+	// Resize again and check size
+	vec.resize(69);
+	ASSERT_EQ(vec.size(), 69);
+}
+
 TEST(ArrayList, capacity)
 {
 
