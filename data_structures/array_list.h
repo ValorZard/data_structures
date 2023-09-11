@@ -245,7 +245,17 @@ public:
 		return ptr == other.ptr; 
 	};
 
+	inline const bool operator== (const Iterator& other) const
+	{
+		return ptr == other.ptr;
+	};
+
 	inline bool operator!= (const Iterator& other)
+	{
+		return ptr != other.ptr;
+	};
+
+	inline const bool operator!= (const Iterator& other) const
 	{
 		return ptr != other.ptr;
 	};
@@ -519,6 +529,12 @@ inline Data ArrayList<Data>::pop_back()
 template <typename Data> 
 inline void ArrayList<Data>::erase(const Iterator iter)
 {
+	// handle edge case if we're trying to erase the end, which is basically pointless
+	if (iter == end())
+	{
+		return;
+	}
+
 	// the capacity is still the same
 	Data* new_array = new Data[capacity];
 
@@ -555,6 +571,7 @@ inline void ArrayList<Data>::erase(const Iterator iter)
 /* THIS CAN BE OPTIMIZED BETTER
 * https://cplusplus.com/reference/vector/vector/erase/
 * Removes from the vector either a single element (position) or a range of elements ([first,last)).
+* deletes elements including first but NOT including last
 
 	This effectively reduces the container size by the number of elements removed, which are destroyed.
 
