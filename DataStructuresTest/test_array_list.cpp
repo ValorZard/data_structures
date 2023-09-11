@@ -355,6 +355,34 @@ TEST(ArrayList, ForEach)
 	}
 }
 
+TEST(ArrayList, insert)
+{
+	ArrayList<int> insertion_vec;
+	for (int i = 0; i < 10; ++i)
+	{
+		insertion_vec.push_back(i);
+	}
+	EXPECT_EQ(insertion_vec.size(), 10);
+	// insert 69, and check if we actually inserted it
+	insertion_vec.insert(insertion_vec.begin(), 69);
+	ASSERT_NE(insertion_vec.find(69), insertion_vec.end());
+	// size increase by 1
+	EXPECT_EQ(insertion_vec.size(), 11);
+	// We're inserting 42 into this 4 times
+	int amount_added = 4;
+	insertion_vec.insert(insertion_vec.begin() + 4, amount_added, 42);
+	// Check if it worked...
+	EXPECT_EQ(insertion_vec.size(), 15);
+	int amount_counted = 0; // checks the amount of 42 we've found
+	for (int numb : insertion_vec)
+	{
+		if (numb == 42)
+		{
+			++amount_counted;
+		}
+	}
+	ASSERT_EQ(amount_added, amount_counted);
+}
 
 
 // Capacity
