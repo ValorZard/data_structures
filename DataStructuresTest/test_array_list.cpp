@@ -237,6 +237,28 @@ TEST(ArrayList, RemoveRange)
 	}
 }
 
+TEST(ArrayList, PopAt)
+{
+	ArrayList<int> vec;
+	vec.push_back(22);
+	vec.push_back(64);
+	vec.push_back(96);
+
+	// check to see if 64 is in there, which it should be
+	size_t index = vec.find(64) - vec.begin();
+	ASSERT_EQ(index, 1);
+
+	// Pop the element at index 1 
+	int data = vec.pop_at(index);
+	// check if the data we popped is equal to 64
+	ASSERT_EQ(data, 64);
+	// check to see if 64 doesn't exist anymore in the array_list and if the array is the same size with all of its elements
+	ASSERT_EQ(vec.find(64), vec.end());
+	ASSERT_EQ(vec.size(), 2);
+	ASSERT_EQ(vec[0], 22);
+	ASSERT_EQ(vec[1], 96);
+}
+
 TEST(ArrayList, EqualsOperator)
 {
 	ArrayList<int> vec;

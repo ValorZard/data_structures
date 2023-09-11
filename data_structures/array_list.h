@@ -627,7 +627,7 @@ template <typename Data> Data ArrayList<Data>::pop_at(size_t index)
 {
 	Data data_popped = array[index];
 	erase(iterator_at(index));
-	return Data;
+	return data_popped;
 }
 
 template<typename Data>
