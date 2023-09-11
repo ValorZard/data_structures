@@ -708,6 +708,7 @@ inline void ArrayList<Data>::insert(Iterator position, size_t amount, Data value
 	array = new_array;
 }
 
+// Note: This only works with using Iterators from other ArrayLists for now
 template<typename Data>
 inline void ArrayList<Data>::insert(Iterator position, Iterator first, Iterator last)
 {
