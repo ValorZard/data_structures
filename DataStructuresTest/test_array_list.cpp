@@ -255,9 +255,22 @@ TEST(ArrayList, iteratorEnd)
 
 }
 
-TEST(ArrayList, iteratorSequence)
+TEST(ArrayList, ForEach)
 {
+	ArrayList<int> vec;
+	vec.push_back(10);
+	vec.push_back(9);
+	vec.push_back(8);
+	vec.push_back(42);
+	vec.push_back(64);
 
+	size_t index = 0;
+	// check if each item is in the same place in the for each as the index its supposed to be at
+	for (auto& item : vec)
+	{
+		ASSERT_EQ(vec[index], item);
+		++index;
+	}
 }
 
 
