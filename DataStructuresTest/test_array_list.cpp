@@ -34,6 +34,31 @@ TEST(ArrayList, ArrayListCopyCtor)
 	EXPECT_EQ(v.at(4), copy.at(4));
 }
 
+TEST(ArrayList, ArrayListCopyAssignment)
+{
+	ArrayList<char> v;
+	v.push_back('a');
+	v.push_back('z');
+	v.push_back('x');
+	v.push_back('r');
+	v.push_back('e');
+
+	ArrayList<char> second_vec = v;
+	second_vec.push_back('l');
+	second_vec.push_back('e');
+	second_vec.push_back('g');
+	second_vec.push_back('o');
+	second_vec.push_back('s');
+
+	second_vec = v;
+
+	EXPECT_EQ(v.at(0), second_vec.at(0));
+	EXPECT_EQ(v.at(1), second_vec.at(1));
+	EXPECT_EQ(v.at(2), second_vec.at(2));
+	EXPECT_EQ(v.at(3), second_vec.at(3));
+	EXPECT_EQ(v.at(4), second_vec.at(4));
+}
+
 TEST(ArrayList, GenerateFromArray)
 {
 	int array_of_ints[] = { 10, 9, 7, 14, 11 };
