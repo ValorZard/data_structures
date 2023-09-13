@@ -216,4 +216,95 @@ public:
 			return index;
 		}
 	}
+
+	// Iterator stuff
+	// https://www.geeksforgeeks.org/implementing-iterator-pattern-of-a-single-linked-list/
+	// https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
+	struct Iterator
+	{
+		using iterator_category = std::forward_iterator_tag;
+		using difference_type = std::ptrdiff_t;
+		using value_type = Node<Data>;
+		using pointer = Node<Data>*;
+		using reference = Node<Data>&;
+
+		pointer node_ptr;
+
+		Iterator(pointer ptr) : node_ptr(ptr) {}
+
+		// Copy assigment
+		Iterator& operator=(Node<Data>* pNode)
+		{
+			this->node_ptr = pNode;
+			return *this;
+		}
+
+		Data& operator*() const 
+		{ 
+			return node_ptr->value; 
+		}
+
+		pointer operator->() 
+		{ 
+			return node_ptr; 
+		}
+
+		Iterator& operator++() 
+		{ 
+			if (node_ptr != nullptr)
+			{
+				node_ptr = node_ptr->next;
+			}
+			return *this; 
+		}
+
+		Iterator operator++(int) 
+		{ 
+			Iterator tmp = *this; 
+			++(*this); 
+			return tmp; 
+		}
+
+		friend bool operator== (const Iterator& a, const Iterator& b) 
+		{ 
+			return a.node_ptr == b.node_ptr; 
+		};
+
+		friend bool operator!= (const Iterator& a, const Iterator& b) 
+		{ 
+			return a.node_ptr != b.node_ptr; 
+		};
+	};
+
+	// Having begin() and end() will make for each loops "just work" since they are looking under the hood for begin() and end()
+
+	Iterator begin()
+	{
+		return Iterator(head);
+	}
+
+	const Iterator begin() const
+	{
+		return Iterator(head);
+	}
+
+	Iterator end()
+	{
+		return Iterator(nullptr);
+	}
+	const Iterator end() const
+	{
+		return Iterator(nullptr);
+	}
+
+	// these two versions of begin and end work when we want the iterator to not change any of the data inside of the array_List
+	const Iterator cbegin() const
+	{
+		return Iterator(head);
+	}
+
+	const Iterator cend() const
+	{
+		return Iterator(nullptr);
+	}
 };

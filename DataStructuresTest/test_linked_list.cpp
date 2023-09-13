@@ -80,3 +80,21 @@ TEST(LinkedListTestSuite, TestLinkedListRemove) {
 	ASSERT_EQ(list.get_size(), 4); // the linked list should now have a lenght of 4
 
 }
+
+TEST(LinkedListTestSuite, TestLinkedListIterator) {
+	LinkedList<int> list{};
+
+	// fill up linkedlist with values from 0 to 9
+	for (int i = 0; i < 10; ++i)
+	{
+		list.append(i);
+	}
+
+	// iterator through the foreach and see if everything matches
+	int index = 0;
+	for (auto& data : list)
+	{
+		ASSERT_EQ(index, data);
+		++index;
+	}
+}
