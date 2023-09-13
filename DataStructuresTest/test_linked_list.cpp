@@ -84,11 +84,15 @@ TEST(LinkedListTestSuite, TestLinkedListRemove) {
 TEST(LinkedListTestSuite, TestLinkedListIterator) {
 	LinkedList<int> list{};
 
-	// fill up linkedlist with values from 0 to 9
-	for (int i = 0; i < 10; ++i)
+	// fill up linkedlist with values from 0 to num_of_values - 1
+	int num_of_values = 10;
+	for (int i = 0; i < num_of_values; ++i)
 	{
 		list.append(i);
 	}
+
+	// size should now equal to num_of_values
+	ASSERT_EQ(list.get_size(), num_of_values);
 
 	// iterator through the foreach and see if everything matches
 	int index = 0;
@@ -97,4 +101,8 @@ TEST(LinkedListTestSuite, TestLinkedListIterator) {
 		ASSERT_EQ(index, data);
 		++index;
 	}
+
+	// by the end, index should be equal to size() and num_of_values
+	ASSERT_EQ(index, list.get_size());
+
 }
