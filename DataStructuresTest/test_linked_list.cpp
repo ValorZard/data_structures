@@ -6,7 +6,7 @@ TEST(LinkedListTestSuite, TestNodes) {
 	// check we have all of the nodes we created
 	// make a string containing all the data inside the nodes
 
-	Node* head = new Node;
+	Node<int>* head = new Node<int>;
 	head->value = 0;
 	std::string test_string = "0";
 	// fill up node with number from 0-99
@@ -21,7 +21,7 @@ TEST(LinkedListTestSuite, TestNodes) {
 
 	// make a string out of all the values in Node
 	std::string node_test_string = "";
-	Node* current_node = head;
+	Node<int>* current_node = head;
 	while (current_node != nullptr)
 	{
 		node_test_string += std::to_string(current_node->value);
@@ -34,14 +34,14 @@ TEST(LinkedListTestSuite, TestNodes) {
 	current_node = head;
 	while (current_node != nullptr)
 	{
-		Node* next_node = current_node->next;
+		Node<int>* next_node = current_node->next;
 		delete current_node;
 		current_node = next_node;
 	}
 }
 
 TEST(LinkedListTestSuite, TestLinkedListBasic) {
-	LinkedList list{};
+	LinkedList<int> list{};
 	list.append(1);
 	list.append(2);
 	list.append(3);
@@ -59,7 +59,7 @@ TEST(LinkedListTestSuite, TestLinkedListBasic) {
 }
 
 TEST(LinkedListTestSuite, TestLinkedListRemove) {
-	LinkedList list{};
+	LinkedList<int> list{};
 	list.append(1);
 	list.append(2);
 	list.append(3);

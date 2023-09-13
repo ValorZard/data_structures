@@ -1,15 +1,17 @@
 #pragma once
+template <typename Data>
 struct Node
 {
-	int value;
+	Data value;
 	Node* next = nullptr;
 };
 
 
-void append_node(Node* head, int value)
+template <typename Data>
+void append_node(Node<Data>* head, Data value)
 {
 	// make a new node to insert
-	Node* new_node = new Node;
+	Node<Data>* new_node = new Node<Data>;
 	new_node->value = value;
 
 	// if the head itself is null, that will be the new node
@@ -20,7 +22,7 @@ void append_node(Node* head, int value)
 	else
 	{
 		// iterate through linked list tilll we find a good spot
-		Node* current_node = head;
+		Node<Data>* current_node = head;
 		while (current_node->next != nullptr)
 		{
 			current_node = current_node->next;
@@ -30,22 +32,23 @@ void append_node(Node* head, int value)
 	}
 }
 
+template <typename Data>
 class LinkedList
 {
 private:
 	int size;
-	Node* head;
-	Node* tail;
+	Node<Data>* head;
+	Node<Data>* tail;
 public:
 
 	// I'm putting this first because I'll be using this in the copy-constructor
-	void append(int value)
+	void append(Data value)
 	{
 		// increase size by one
 		++size;
 
 		// make a new node to insert
-		Node* new_node = new Node;
+		Node<Data>* new_node = new Node<Data>;
 		new_node->value = value;
 
 		// if the head itself is null, that will be the new node
@@ -72,12 +75,12 @@ public:
 	LinkedList(const LinkedList& other)
 	{
 		// iterate through data in list
-		Node* current_node = other.head;
+		Node<Data>* current_node = other.head;
 		while (current_node != nullptr)
 		{
 			// append data in this list
 			append(current_node->value);
-			Node* next_node = current_node->next;
+			Node<Data>* next_node = current_node->next;
 			current_node = next_node;
 		}
 	}
@@ -85,29 +88,29 @@ public:
 	~LinkedList()
 	{
 		// delete elements in linked list
-		Node* current_node = head;
+		Node<Data>* current_node = head;
 		while (current_node != nullptr)
 		{
-			Node* next_node = current_node->next;
+			Node<Data>* next_node = current_node->next;
 			delete current_node;
 			current_node = next_node;
 		}
 	}
 
 	// we don't want to accidentally change head
-	const Node* get_head() const
+	const Node<Data>* get_head() const
 	{
 		return head;
 	}
 
 	// we don't want to accidentally change head
-	const Node* get_tail() const
+	const Node<Data>* get_tail() const
 	{
 		return tail;
 	}
 
 	// make data inside the node uneditable
-	const Node* get_node(int index) const
+	const Node<Data>* get_node(int index) const
 	{
 		// throw exception if index is out of bounds
 		if (index >= size)
@@ -127,7 +130,7 @@ public:
 		}
 
 		// iterate through nodes until we're at the index we want
-		Node* current_node = head;
+		Node<Data>* current_node = head;
 		for (int i = 0; i < index; ++i)
 		{
 			current_node = current_node->next;
@@ -155,8 +158,8 @@ public:
 		}
 
 		// delete elements in linked list
-		Node* current_node = head;
-		Node* previous_node = nullptr;
+		Node<Data>* current_node = head;
+		Node<Data>* previous_node = nullptr;
 
 		// if index_to_remove is zero, we're just removing the head, which is easy
 		if (index_to_remove == 0)
@@ -184,10 +187,10 @@ public:
 	}
 
 	// returns -1 if not found
-	int find(int value)
+	int find(Data value)
 	{
 		// delete elements in linked list
-		Node* current_node = head;
+		Node<Data>* current_node = head;
 
 		int index = 0;
 
