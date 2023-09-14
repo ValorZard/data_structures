@@ -6,10 +6,12 @@
 #include <cstddef>  // For std::ptrdiff_t
 #include <algorithm>
 
-// ArrayList is equivalent to std::vector
-// Influenced by https://github.com/Miguel-Deniz/Vector-Implementation/
-// Most of this code is mine, but if I ever got stuck on something, I looked at how he did it
-
+/* ArrayList is equivalent to std::vector
+	Influenced by https://github.com/Miguel-Deniz/Vector-Implementation/
+	Most of this code is mine, but if I ever got stuck on something, I looked at how he did it
+	NOTE: even though this is essentially my vector of std::vector, there are a bunch of changes in here that I made to the API
+	These changes are meant for this class to make more sense to me, such as pop_back() returning the element at the end instead of just deleting and forgetting about it
+*/
 template <typename Data>
 class ArrayList
 {
