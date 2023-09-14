@@ -2,6 +2,7 @@
 #include "linked_list.h"
 #include <string>
 
+// https://www.geeksforgeeks.org/implementing-hash-table-open-addressing-linear-probing-cpp/
 template <typename Key, typename Value>
 class HashNode
 {
@@ -58,9 +59,8 @@ public:
         size_t hashIndex = hashCode(key);
 
         // find next free space
-        while (array[hashIndex] != nullptr
-            && array[hashIndex]->key != key
-            && deleted_array[hashIndex] == true) // don't store value in a deleted space
+        // don't store value in a deleted space
+        while ((array[hashIndex] != nullptr || array[hashIndex]->key != key) || deleted_array[hashIndex] == true)
         {
             hashIndex++;
             hashIndex %= capacity;
