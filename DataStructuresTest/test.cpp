@@ -2,7 +2,20 @@
 #include "../data_structures/sorting.h"
 #include "../data_structures/binary_tree.h"
 #include "../data_structures/binary_tree.cpp"
+#include "../data_structures/hash_map.h"
 
+TEST(HashMapTestSuite, BasicTest)
+{
+	HashMap<int, int>* h = new HashMap<int, int>;
+	h->insertNode(1, 1);
+	h->insertNode(2, 2);
+	h->insertNode(2, 3);
+	ASSERT_EQ(h->sizeofMap(), 3);
+	ASSERT_EQ(h->deleteNode(2), 3);
+	ASSERT_EQ(h->sizeofMap(), 2);
+	ASSERT_EQ(h->isEmpty(), false);
+	ASSERT_EQ(h->get(2), 2);
+}
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 	BinarySearchTree bst{};

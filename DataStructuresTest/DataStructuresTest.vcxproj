@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="test_binary_tree.cpp" />
+    <ClInclude Include="test_hash_map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
