@@ -117,7 +117,7 @@ public:
                 return 0;
 
             // skip deleted values
-            if (deleted_array[hashIndex] == false)
+            if (deleted_array[hashIndex] == true)
                 continue;
 
             // if node found return its value
