@@ -45,7 +45,7 @@ public:
     }
     // This implements hash function to find index
     // for a key
-    size_t hashCode(Key key)
+    size_t hashToIndex(Key key)
     {
         return key % capacity;
     }
@@ -56,11 +56,11 @@ public:
         HashNode<Key, Value>* temp = new HashNode<Key, Value>(key, value);
 
         // Apply hash function to find index for given key
-        size_t hashIndex = hashCode(key);
+        size_t hashIndex = hashToIndex(key);
 
         // find next free space
         // don't store value in a deleted space
-        while ((array[hashIndex] != nullptr || array[hashIndex]->key != key) || deleted_array[hashIndex] == true)
+        while ((array[hashIndex] != nullptr && array[hashIndex]->key != key) || deleted_array[hashIndex] == true)
         {
             hashIndex++;
             hashIndex %= capacity;
@@ -79,7 +79,7 @@ public:
     {
         // Apply hash function
         // to find index for given key
-        size_t hashIndex = hashCode(key);
+        size_t hashIndex = hashToIndex(key);
 
         // finding the node with given key
         while (deleted_array[hashIndex] == false) {
@@ -107,7 +107,7 @@ public:
     Value get(size_t key)
     {
         // Apply hash function to find index for given key
-        size_t hashIndex = hashCode(key);
+        size_t hashIndex = hashToIndex(key);
         size_t counter = 0;
 
         // finding the node with given key

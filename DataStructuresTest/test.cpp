@@ -10,11 +10,11 @@ TEST(HashMapTestSuite, BasicTest)
 	h->insertNode(1, 1);
 	h->insertNode(2, 2);
 	h->insertNode(2, 3);
-	ASSERT_EQ(h->sizeofMap(), 3);
-	ASSERT_EQ(h->deleteNode(2), 3);
 	ASSERT_EQ(h->sizeofMap(), 2);
+	ASSERT_EQ(h->deleteNode(2), 3);
+	ASSERT_EQ(h->sizeofMap(), 1);
 	ASSERT_EQ(h->isEmpty(), false);
-	ASSERT_EQ(h->get(2), 2);
+	ASSERT_EQ(h->get(2), 2); // this should cause an error
 }
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
