@@ -142,6 +142,7 @@
     <ClInclude Include="hash_map.h" />
     <ClInclude Include="linked_list.h" />
     <ClInclude Include="array_list.h" />
+    <ClInclude Include="queue.h" />
     <ClInclude Include="sorting.h" />
     <ClInclude Include="stack.h" />
   </ItemGroup>

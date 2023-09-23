@@ -3,6 +3,7 @@
 #include "../data_structures/binary_tree.h"
 #include "../data_structures/hash_map.h"
 #include "../data_structures/stack.h"
+#include "../data_structures/queue.h"
 
 TEST(HashMapTestSuite, BasicTest)
 {
@@ -38,6 +39,7 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 TEST(StackTestSuite, TestStack)
 {
+	// First In Last Out
 	Stack<int> stack;
 	for (int i = 0; i < 10; ++i)
 	{
@@ -48,6 +50,22 @@ TEST(StackTestSuite, TestStack)
 	for (int i = 9; i >= 0; --i)
 	{
 		ASSERT_EQ(stack.pop(), i);
+	}
+}
+
+TEST(QueueTestSuite, TestQueue)
+{
+	// First In First Out
+	Queue<int> queue;
+	for (int i = 0; i < 10; ++i)
+	{
+		queue.push(i);
+	}
+
+	// this should pop in this direction
+	for (int i = 0; i < 10; ++i)
+	{
+		ASSERT_EQ(queue.pop(), i);
 	}
 }
 
