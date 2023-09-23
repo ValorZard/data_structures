@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "../data_structures/sorting.h"
 #include "../data_structures/binary_tree.h"
-#include "../data_structures/binary_tree.cpp"
 #include "../data_structures/hash_map.h"
 
 TEST(HashMapTestSuite, BasicTest)
@@ -16,6 +15,7 @@ TEST(HashMapTestSuite, BasicTest)
 	ASSERT_EQ(h->isEmpty(), false);
 	ASSERT_EQ(h->get(2), 2); // this should cause an error
 }
+
 TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 	BinarySearchTree bst{};
@@ -34,6 +34,7 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
 
 }
+
 int main(int argc, char** argv)
 {
 	testing::InitGoogleTest(&argc, argv);
