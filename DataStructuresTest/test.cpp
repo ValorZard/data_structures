@@ -2,6 +2,7 @@
 #include "../data_structures/sorting.h"
 #include "../data_structures/binary_tree.h"
 #include "../data_structures/hash_map.h"
+#include "../data_structures/stack.h"
 
 TEST(HashMapTestSuite, BasicTest)
 {
@@ -33,6 +34,21 @@ TEST(BinarySearchTreeTestSuite, TestInsertTree) {
 
 	ASSERT_EQ(bst.find(13), -1); // 13 doesn't exist
 
+}
+
+TEST(StackTestSuite, TestStack)
+{
+	Stack<int> stack;
+	for (int i = 0; i < 10; ++i)
+	{
+		stack.push(i);
+	}
+
+	// this should pop in the reverse direction
+	for (int i = 9; i >= 0; --i)
+	{
+		ASSERT_EQ(stack.pop(), i);
+	}
 }
 
 int main(int argc, char** argv)
